@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+Áhrif þessarar Innu keyrslu munu verða:
+<ul>
+<li>Nýir nemendur: {{ stats.create }}</li>
+<li>Uppfærðir nemendur: {{ stats.update }}</li>
+<li>Fjarlægðir nemendur: {{ stats.delete }}</li>
+</ul>
+
+<form method="post">
+	<p><input type="submit" name="commit" value="Breyta í gagnagrunni"></p>
+</form>
+
+<a href="/">Hætta við</a>
+
+{% endblock %}

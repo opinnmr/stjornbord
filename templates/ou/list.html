@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load listing %}
+
+{% block content %}
+
+{% block heading %}
+<h2>Starfsmenn <a href="/ou/add/"><img src="{{MEDIA_URL}}img/tango/22/actions/list-add.png"></a></h2>
+{% endblock %}
+
+{% if not object_list %}
+	<ul class="infolist">
+		<li>Engar niðurstöður fundust. Athugaðu að:
+			<ul>
+				<li>Leita einungis eftir fornafni <strong>eða</strong> eftirnafni, ekki fullu nafni.</li>
+				<li>Leita eftir kennitölu</li>
+			</ul>
+		</li>
+	</ul>
+{% endif %}
+
+
+<div class="filters">
+	{% block filters %}
+		{% listing_filter "Sta&eth;a" "status" %}
+		{% listing_filter "H&oacute;pur" "group" %}
+	{% endblock %}
+</div>
+
+<form method="post" accept-charset="utf-8" action="?{% append_filter filters %}">
+	{{ search_form }}
+	<input type="submit" value="Sía">
+	<br>Leita má eftir fornafni, eftirnafni eða kennitölu. 
+</form>
+
+<p>&nbsp;</p>
+
+{# Factor out to templatetag #}
+{% ifnotequal pages 1 %}
+	<div class="paginator">
+		{% if has_previous %}
+			<a href="?page={{previous}}{% append_filter filters %}"><img src="{{MEDIA_URL}}img/tango/22/actions/go-previous.png" style="top: 3px"></a>
+		{% endif %}
+
+		{{ page }} af {{ pages }}
+
+		{% if has_next %}
+			<a href="?page={{next}}{% append_filter filters %}"><img src="{{MEDIA_URL}}img/tango/22/actions/go-next.png"></a>
+		{% endif %}
+	</div>
+{% endifnotequal %}
+
+
+
+{% block results %}
+	<table>
+		<thead>
+		<tr>
+			<th width="25%">Kennitala</th>
+			<th width="50%">Nafn</th>
+			<th width="5%"></th>
+			<th width="20%">Notendur</th>
+			<th width="5%"></th>
+			<th width="20%">Listar</th>
+		</tr>
+		</thead>
+		<tbody>
+	    {% for ou in object_list %}
+		<tr class="{% cycle "row1" "row2" %}">
+			<td>{{ ou.kennitala }}</td>
+			<td><a href="{{ ou.get_absolute_url }}">{{ ou.first_name }} {{ ou.last_name }}</a></td>
+			<td><a href="{{ ou.get_absolute_url }}add_user/"><img src="{{MEDIA_URL}}img/tango/16/actions/list-add.png"></td>
+			<td>
+				{% for user in ou.userp.all %}
+					<span{% if not user.status.active %} class="strikethrough"{% endif %}><a href="{{ user.get_absolute_url }}">{{ user }}</a></span><br>
+				{% endfor %}
+			</td>
+			<td><a href="{{ ou.get_absolute_url }}add_list/"><img src="{{MEDIA_URL}}img/tango/16/actions/list-add.png"></td>
+			<td>
+				{% for ml in ou.mailinglist.all %}
+					<span><a href="{{ ml.get_absolute_url }}">{{ ml }}</a></span><br>
+				{% endfor %}
+			</td>
+
+		</tr>
+	    {% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
+
+{% ifnotequal pages 1 %}
+	<div class="paginator">
+		{% if has_previous %}
+			<a href="?page={{previous}}{% append_filter filters %}"><img src="{{MEDIA_URL}}img/tango/22/actions/go-previous.png" style="top: 3px"></a>
+		{% endif %}
+
+		{{ page }} af {{ pages }}
+
+		{% if has_next %}
+			<a href="?page={{next}}{% append_filter filters %}"><img src="{{MEDIA_URL}}img/tango/22/actions/go-next.png"></a>
+		{% endif %}
+	</div>
+{% endifnotequal %}
+
+{% endblock %}

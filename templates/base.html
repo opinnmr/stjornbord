@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>Menntaskólinn í Reykjavík</title>
+	    <link rel="stylesheet" href="{{MEDIA_URL}}css/mr.css" type="text/css" media="screen" charset="utf-8">
+    </head>
+<body>
+
+<div class="header">
+    <h1><a href="/">Menntaskólinn í Reykjavík</a></h1>
+    <ul>
+        {% if request.user.is_authenticated %}
+        <li><a href="/"><img src="{{MEDIA_URL}}img/tango/22/actions/go-home.png"><br>Mín síða</a></li>
+        {% else %}
+        <li><a href="/login/?next={{ request.get_full_path }}"><img src="{{MEDIA_URL}}img/tango/22/places/start-here.png"><br>Innskráning</a></li>
+        {% endif %}
+
+
+        {% if request.user.is_authenticated %}
+        <li><a href="/logout/"><img src="{{MEDIA_URL}}img/tango/22/actions/system-log-out.png"><br>Skrá út</a></li>
+        {% endif %}
+    </ul>
+</div>
+
+<div id="content">
+{% block content %}
+{% endblock %}
+</div>
+
+
+</body>
+</html>

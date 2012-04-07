@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Augnablik..</h2>
+
+<p>Nú ættir þú að vera send/sendur í vefpóstinn  þinn.</p>
+<p>&nbsp;</p>
+<p>Ef ekkert gerist innan nokkurra sekúntna gætur þú prufað að smella á "Reyna aftur" takkann hér fyrir neðan.</p>
+<p>&nbsp;</p>
+<p>Virki það ekki heldur skalt þú hafa samband við skrifstofu Menntaskólans</p>
+<p>&nbsp;</p>
+
+<form action="{{ response_url }}" method="post" id="loginform">
+<input type="hidden" name="SAMLResponse" value="{{ saml_response }}">
+<input type="hidden" name="RelayState" value="{{ token }}">
+<input type="submit" value="Reyna aftur">
+</form>
+
+<script language="JavaScript">
+<!--
+
+document.getElementById('loginform').submit();
+
+//-->
+</script>
+
+{% endblock %}

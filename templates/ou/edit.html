@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ title }}</h2>
+
+{% if editwarning %}
+<ul class="infolist"> 
+    <li>Athugið: Almennt vill maður heldur breyta stöðu
+        starfsmannsins sjálfs, en <strong>ekki netfangsins</strong>.
+        Sé stöðu starfsmanns breytt í <em>Fyrrverandi</em>
+        er staða netfanga sjálfkrafa uppfærð.</li> 
+</ul>
+{% endif %}
+
+<form method="post">
+	<ul>{{form}}</ul>
+	<input type="submit" value="Vista">
+</form>
+{% endblock %}

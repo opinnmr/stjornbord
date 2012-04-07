@@ -1,0 +1,7 @@
+<h2>{{ title }}</h2>
+<ul class="filter">
+    <li{% if not value %} class="active"{% endif %}><a href="?{{ other_filters }}">Allir</a></li>
+    {% for item in items %}
+    <li{% ifequal value item.id %} class="active"{% endifequal %}><a href="?{{ other_filters }}&{{ filter_name }}={{ item.id }}">{{ item.name }}</a></li>
+    {% endfor %}
+</ul>

@@ -1,0 +1,252 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family:Verdana,Tahoma,sans-serif;
+    font-size:10pt;
+    width: 850px;
+    margin: 0 auto 0 auto;
+}
+
+a {
+    color:#204a87;
+    text-decoration:none;
+}
+
+a:hover {
+    color: #3465a4;
+}
+
+img {
+    border: 0;
+}
+
+.clear {
+    clear: both;
+}
+
+.strikethrough {
+    text-decoration: line-through;
+}
+
+/* Header */
+
+div.header {
+    margin-top: 1em;
+    margin-bottom: 3em;
+    height: 100px;
+    background: #a5ceef url('../img/mr_small_trans.png') no-repeat;
+    background-position: 10px 5px;
+    border: 2px solid #4284ce;
+}
+
+div.header h1 {
+    padding: 60px 0 0 170px;
+    font-size: 16pt;
+    font-weight: normal;
+    float: left;
+}
+
+div.header a {
+    color: #00319c;
+}
+
+div.header ul {
+    list-style-type: none;
+    padding-right: 1em;
+    float: right;
+}
+
+div.header ul li {
+    float: left;
+    text-align: center;
+    width: 6.5em;
+    font-size: 7pt;
+    padding-top: 2em;
+}
+
+/* Footer */
+
+/* Generic Content */
+
+div#content {
+    padding: 0em 2em;
+}
+
+div#content > h2 {
+    margin-bottom: 1em;
+    color: #204a87;
+}
+
+ul {
+    margin: 1em 2em;
+}
+ul li {
+    line-height: 1.5;
+}
+
+/* Help content*/
+
+div#helpcontent h3 {
+    margin: 1em 0;
+    color: #204a87;
+}
+
+div#helpcontent p {
+    margin: 1em 0;
+    line-height: 1.5;
+}
+
+div#helpcontent img {
+    margin: 1em 0;
+}
+
+
+/* Frontpage */
+
+div.frontpage > div {
+    float: left;
+    width: 48%;
+}
+
+div.frontpage > div > img {
+    float: left;
+}
+
+div.frontpage > div > h2 {
+    margin-left: 2.5em;
+}
+
+div.frontpage > div > p {
+    padding: 1em 5em;
+    font-size: 8pt;
+}
+
+
+/* Filters */
+
+div.filters {
+    float: right;
+    padding-left: 0.5em;
+}
+
+div.filters h2 {
+    font-size: 12pt;
+}
+
+div.filters ul {
+    margin-bottom: 1em;
+    list-style-type:none;
+    padding-left: 0;
+}
+
+div.filters li.active {
+    font-weight: bold;
+}
+
+/* Paginator */
+
+div.paginator {
+    text-align: center;
+    padding: 1em 0;
+}
+
+/* Forms */
+/* Stylesheet heavily copied from Django's Admin */
+form {
+    font-size:11px;
+    padding-left:0pt;
+}
+
+/*          the second one is for radio selection, user registration */
+form > ul, form > ul > li > ul {
+    list-style-type:none;
+    padding:0pt;
+}
+
+form > ul > li {
+    color:gray;
+    padding-bottom:0.6em;
+}
+
+/* used for radio selection, user registration  */
+form > ul > li > ul > li > label > input {
+    margin-left:14em;
+}
+
+label[for="id_username_0"] {
+    float: none;
+}
+
+form > ul > li > label {
+    color:black;
+    display:block;
+    float:left;
+    padding:0em 1em 0pt 0pt;
+    text-align:right;
+    width:13em;
+}
+form input[type="submit"] {
+    margin-left:11em;
+}
+form input, form textarea, form select {
+    font-size:11px;
+    margin:2px 5pt;
+    padding:2px 3px;
+    vertical-align:middle;
+}
+form textarea {
+    vertical-align:top !important;
+}
+form input[type = "text"], form input[type="password"], form textarea, form select {
+    border:1px solid #CCCCCC;
+}
+form input[type = "submit"], form input[type="button"] {
+    background:white none repeat scroll 0%;
+    border-color:#DDDDDD rgb(170, 170, 170) rgb(170, 170, 170) rgb(221, 221, 221);
+    border-style:solid;
+    border-width:1px;
+    color:black;
+    padding:3px;
+}
+
+form input.default[type = "submit"] {
+    background:#7CA0C7 none repeat scroll 0%;
+    border:2px solid #5B80B2;
+    color:white;
+    font-weight:bold;
+}
+
+/* Error-, warning- and infolists. */
+
+ul.errorlist {
+    list-style-type: none;
+    background: #FFDDCC url(../img/tango/22/status/dialog-error.png) no-repeat;
+    background-position: 3px;
+    border: 2px solid #DD0000;
+    margin-bottom: 1em;
+    padding: 0.5em 2.5em;
+    color: black;
+}
+
+ul.infolist {
+    list-style-type: none;
+    background: #d0deed url(../img/tango/22/status/dialog-information.png) no-repeat;
+    background-position: 3px 7px;
+    border: 2px solid #3465a4;
+    margin-bottom: 1em;
+    padding: 0.5em 2.5em;
+    color: black;
+}
+
+/* Lists */
+table thead {
+    text-align: left;
+    color: #00319c;
+}
+
+table td {
+    border-bottom: 1px dotted black;
+}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Skoða notanda</h2>
+
+<form method="post">
+	<ul>
+		<li style="color: black;"><label>Notandanafn:</label> {{ user.username }}</li>
+		<li style="color: black;"><label>Staða:</label> {{ user.status.name }}</li>
+		<li style="color: black;"><label>Verður lokað:</label> {% firstof user.deactivate "" %}</li>
+	</ul>
+</form>
+
+{% endblock %}

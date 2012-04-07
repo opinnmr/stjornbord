@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Breyta notanda</h2>
+
+<form method="post">
+	<ul>
+		<li style="color: black;"><label>Nafn:</label> {{ student.first_name }} {{ student.last_name }}</li>
+		<li style="color: black;"><label>Kennitala:</label> {{ student.kennitala }}</li>
+		{{form}}
+	</ul>
+	<input type="submit" value="Vista">
+</form>
+{% endblock %}

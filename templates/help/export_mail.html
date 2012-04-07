@@ -1,0 +1,45 @@
+{% extends "help/base.html" %}
+
+
+{% block help_title %}Hvernig má færa póst úr MR pósthólfi?{% endblock %}
+
+{% block helpcontent %}
+<div>
+	<p>Sumir notendur, sér í lagi nemendur og starfsmenn sem ekki eru lengur við skólan, kjósa að flytja póst úr MR pósthólfi sínu í annað pósthólf. Til þess eru ýmsar leiðir færar, en auðveldast er að opna fyrir svokallaðan POP eða IMAP aðgang að pósthólfinu og sækja póstinn svo, ýmist með póstforriti eins og Thunderbird, Outlook eða Mail - eða þá að flytja póstinn yfir í annað GMail netfang. Í þessum leiðbeiningum munum við notast við POP aðgang.</p>
+
+	<h3>Skref 1: Opna fyrir POP aðgang</h3>
+	<p>Fyrst þarf að virkja POP aðgang að hólfinu.</p>
+	<ul>
+	    <li>Skráðu þig inn í pósthólfið þitt (<a href="http://postur.mr.is">http://postur.mr.is</a>)</li>
+	    <li>Veldu Stillingar (uppi í hægra horninu)</li>
+	    <li>Veldu Áframsending og POP/IMAP</li>
+	    <li>Veldu "Leyfa POP-aðgang fyrir allan póst (líka póst sem þegar hefur verið hlaðið niður)" undir POP-niðurhal.</li>
+	</ul>
+	<p><img src="/media/img/help/export_mail1.png"></p>
+
+	<h3>Skref 2a: Flytja póst í hefðbundið póstforrit</h3>
+	<p>Margir kjósa að flytja póstinn í hefðbundið póstforrit, eins og Thunderbird, Outlook eða Mail. Google er með ítarlegar leiðbeiningar um hvernig skal stilla þessi forrit og þær má nálgast <a href="http://mail.google.com/support/bin/answer.py?answer=12103&cbid=-1igvh9to89dpd&src=cb&lev=topic">hér</a> (á ensku).</p>
+	<p><strong>Athugið:</strong> þessar leiðbeiningar eru gerðar fyrir GMail notendur, ekki MR notendur sérstaklega. Því þarf að athuga að slá inn netfangið <i>notandi@mr.is</i> í stað <i>notandi@gmail.com</i>. Áfram skal þó nota póstþjóninn <i>pop.gmail.com</i> (ekki <i>pop.mr.is</i>!)</p>
+	<p>Frekari upplýsingar:
+	    <ul>
+	        <li><a href="http://mail.google.com/support/bin/topic.py?topic=12912">Almenntar POP leiðbeiningar</a></li>
+	        <li><a hef="http://mail.google.com/support/bin/answer.py?answer=34383">Munur á Google Mail og Google Apps (MR póstinum)</a></li>
+	    </ul></p>
+	
+	<h3>Skref 2b: Flytja póstinn í annað GMail pósthólf</h3>
+	<p>Margir spyrja sérstaklega um hvort færa megi póstinn yfir á annað GMail netfang og verður það því útlistað hér. Gert er ráð fyrir ensku viðmóti.</p>
+	<ul>
+	    <li>Skráðu þig inn í GMail póstinn þinn (<a href="http://mail.google.com">http://mail.google.com</a> eða <a href="http://gmail.com">http://gmail.com</a>)</li>
+	    <li>Veldu "Settings" (uppi í hægra horninu)</li>
+	    <li>Veldu "Accounts and Import" og smelltu á "Import mail and contacts"</li>
+	    <li>Nú ætti að koma upp nýr gluggi, líkt og á myndinni hér fyrir neðan. Sláðu inn netfangið þitt og veldu "Continue".<br><img src="/media/img/help/export_mail2.png"></li>
+	    <li>Sláðu því næst inn lykilorðið þitt og veldu "Continue".<br><img src="/media/img/help/export_mail3.png"></li>
+	    <li>Nú mun Google gera heiðarlega tilraun til að finna út hvaða stillingar henta best, en líklega ekki takast það. Því þarf að slá inn réttar stillingar líkt og á myndinni hér fyrir neðan. Athugaðu að nota <i>@mr.is</i> netfang en <i>pop.gmail.com</i> sem POP þjón. Mikilvægt er að nota SSL og port 995 (til að geta valið SSL og port þarf fyrst að velja Edit, sem sést ekki á myndinni). Veldu því næst "Continue".<br><img src="/media/img/help/export_mail4.png"></li>
+	    <li>Síðasta skrefið inniheldur nokkrar valfrjálsar stillingar. Við mælum með neðangreindum stillingum. Þá er búið að stilla allt og því skal velja "Start import".<br>Ath: Heyrst hefur að notendur hafi lent í vandræðum með að nota <em>"Leave a copy of retrieved message on server"</em> valmöguleikan. Við mælum því með að hann sé ekki notaður.<br><img src="/media/img/help/export_mail5.png"></li>
+	    <li>Google gefur sér allt að tvo sólarhringa til að sækja póstinn, en okkar reynsla sýnir að færslan hefst á nokkrum mínútum.</li>
+	    <li>Í raun bætir þetta "Import" tól við nýjum POP3 reikningi (e. account) sem má sjá undir "Accounts and Import" í "Settings". Þegar búið er að ganga úr skugga um að allur póstur hafi verið fluttur, gæti því verið snjallt að fjarlægja reikninginn, líkt og á myndinni hér fyrir neðan. Sé þetta ekki gert, gætir þú fengið villu þegar MR netfanginu þínu verður lokað.<br><img src="/media/img/help/export_mail6.png"></li>
+    </ul>
+    
+
+</div>
+{% endblock %}

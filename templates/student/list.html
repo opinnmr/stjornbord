@@ -1,0 +1,49 @@
+{% extends "ou/list.html" %}
+{% load listing %}
+
+{% block heading %}
+<h2>Nemendur</h2>
+
+<p>Þessi síða er aðallega ætluð til uppflettingar. Hér er hægt að breyta
+	prentkvóta og stöðu nemenda, til dæmis að breyta stöðu skiptinema úr
+	<i>Fyrrverandi</i> í <i>Í leyfi</i>. Til að breyta nemendaupplýsingum
+	skal almennt velja að senda inn nýja Innu skrá.</p>
+
+<p>&nbsp;</p>
+
+{% endblock %}
+
+{% block filters %}
+	{% listing_filter "Sta&eth;a" "status" %}
+	{% listing_filter "Bekkur" "klass" %}
+	{% endblock %}
+
+{% block results %}
+<table>
+	<thead>
+	<tr>
+		<th width="25%">Kennitala</th>
+		<th width="50%">Bekkur</th>
+		<th width="50%">Nafn</th>
+		<th width="20%">Notandi</th>
+	</tr>
+	</thead>
+	<tbody>
+    {% for student in object_list %}
+	<tr class="{% cycle "row1" "row2" %}">
+		<td>{{ student.kennitala }}</td>
+		<td><a href="{{ student.get_absolute_url }}">{{ student.first_name }} {{ student.last_name }}</a></td>
+		<td>{{ student.klass.name }}</td>
+		<td>
+			{% for user in student.userp.all %}
+				<a href="{{ user.get_absolute_url }}printquota/"><img src="{{ MEDIA_URL }}img/tango/16/actions/document-print.png"></a>
+				<span{% if not user.status.active %} class="strikethrough"{% endif %}><a href="{{ user.get_absolute_url }}">{{ user }}</a></span>
+				<br>
+			{% endfor %}
+		</td>
+
+	</tr>
+    {% endfor %}
+	</tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Breyta prentkvóta</h2>
+
+{% if noquota %}
+
+	<ul class="infolist">
+		<li>Engar kvótaupplýsingar fundust!<br>
+			<br>
+			Þetta þýðir líklega að nemdandinn
+			hefur aldrei prentað út. Þegar hann prentar út í fyrsta skipti fær
+			hann sjálfkrafa 100 blaðsíður.<br>
+			<br>
+			Ef þetta er ekki rétt, vinsamlegast hafðu samband við hjalp@mr.is.</li>
+	</ul>
+
+{% else %}
+
+	<p>Hér má sjá og breyta kvótastöðu nemenda.</p>
+	<p>&nbsp;</p>
+
+	<form method="post">
+		<ul>
+		<li style="color: black;"><label>Notandanafn:</label> {{ userp.user.username }}</li>
+		{{form}}
+		</ul>
+		<input type="submit" value="Vista">
+	</form>
+
+{% endif %}
+
+
+{% endblock %}

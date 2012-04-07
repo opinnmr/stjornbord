@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+{% if webmail %}
+<h2>Innskráning í vefpóst</h2>
+{% else %}
+<h2>Innskráning í stjórnborð</h2>
+{% endif %}
+
+<div>
+	<form method="post" action="?SAMLRequest={{ request.GET.SAMLRequest|urlencode }}&RelayState={{ request.GET.RelayState|urlencode }}" class="inputform">
+	<ul>
+		{{form.as_ul}}
+	</ul>
+	<input type="submit" value="Skrá inn" />
+	{% csrf_token %}
+	</form>
+</div>
+
+{% endblock %}

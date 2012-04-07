@@ -1,0 +1,18 @@
+{% extends "registration/register.html" %}
+
+{% block content %}
+<h2>Breyta notanda</h2>
+
+<p>Einungis er hægt að breyta lykilorði nemenda. Notendur þeirra stjórnast annars af Innu keyrslum.</p>
+<p>&nbsp;</p>
+
+<form method="post">
+	<ul>
+	<li style="color: black;"><label>Notandanafn:</label> {{ userp.user.username }}</li>
+	<li style="color: black;"><label>Staða:</label> {{ userp.status.name }}&nbsp;</li>
+	<li style="color: black;"><label>Verður lokað:</label> {% firstof userp.deactivate "" %}&nbsp;</li>
+	{{form}}
+	</ul>
+	<input type="submit" value="Vista">
+</form>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<h2>Stjórnborð</h2>
+
+
+<div class="frontpage">
+	
+{% if request.user.is_authenticated %}
+{% if request.user.is_superuser %}
+
+<div>
+    <img src="{{MEDIA_URL}}img/tango/32/apps/system-users.png">
+    <h2><a href="/students/list/?status=1">Nemendaskrá</a></h2>
+    <p>Skoða nemendaskrá.</p>
+</div>
+
+<div>
+    <img src="{{MEDIA_URL}}img/tango/32/actions/document-save.png">
+    <h2><a href="/students/upload/">Uppfæra nemendaskrá</a></h2>
+    <p>Uppfæra nemendalista út frá Innu úttaki.</p>
+</div>
+
+<div>
+    <img src="{{MEDIA_URL}}img/tango/32/apps/system-users.png">
+    <h2><a href="/ou/list/?status=1">Starfsmannaskrá</a></h2>
+    <p>Leita að eða bæta við starfsmönnum og notendum fyrir þá.</p>
+</div>
+
+<div>
+    <img src="{{MEDIA_URL}}img/tango/32/actions/document-save-as.png">
+    <h2><a href="/students/export/">Netföng fyrir Innu</a></h2>
+    <p>Sækja lista yfir kennitölur og netföng núverandi nemenda fyrir Innu. Ath: Keyrsla tekur nokkrar sekúntur.</p>
+</div>
+
+<div>
+    <img src="{{MEDIA_URL}}img/tango/32/devices/computer.png">
+    <h2><a href="/admin/devices/device/">Tækjaskráning</a></h2>
+    <p>Skrá yfir tölvur á neti Menntaskólans (í Django).</p>
+</div>
+
+
+<div>
+    <img src="{{MEDIA_URL}}img/tango/32/status/audio-volume-high.png">
+    <h2><a href="/admin/infoscreen/">Tilkynningakerfi</a></h2>
+    <p>Tilkynningaskjáir (í Django).</p>
+</div>
+
+
+{% endif%}
+
+<div>
+    <img src="{{MEDIA_URL}}img/tango/32/actions/system-lock-screen.png">
+    <h2><a href="/change_password/">Breyta lykilorði</a></h2>
+    <p>Hér getur þú breytt þínu eigin lykilorði.</p>
+</div>
+
+<div>
+    <img src="{{MEDIA_URL}}img/tango/32/actions/document-print.png">
+    <h2><a href="#">Prentkvóti</a></h2>
+	{% if noquota %}
+    <p>Þú hefur aldrei prentað út.</p>
+	{% else %}
+    <p>Þú átt {{quota}} blaðsíður eftir.</p>
+	{% endif %}
+</div>
+
+{% else %}
+
+<div>
+    <img src="{{MEDIA_URL}}img/tango/32/places/start-here.png">
+    <h2><a href="/login/">Innskráning</a></h2>
+    <p>Velkomin á stjórnborð MR. Áður en þú getur átt við notendastillingar
+	þarft þú að skrá þig inn.</p>
+    <p>Þú getur skráð þig inn með því að smella á "Innskráning" hér fyrir ofan.</p>
+</div>
+
+<div>
+    <img src="{{MEDIA_URL}}img/tango/32/emotes/face-glasses.png">
+    <h2><a href="/register/">Nýskráning nemenda</a></h2>
+    <p>Hér geta nýnemar við Menntaskólann skráð sig fyrir @mr.is netfangi.</p>
+    <p>Athugið að einungis er hægt að skrá sig fyrir netfangi úr tölvukerfi
+	skólans.</p>
+
+</div>
+
+{% endif%}
+
+<div>
+    <img src="{{MEDIA_URL}}img/tango/32/apps/internet-mail.png">
+    <h2><a href="http://postur.mr.is/">Tölvupóstur</a></h2>
+    <p>Skoða @mr.is tölvupóst.</p>
+</div>
+
+<div>
+    <img src="{{MEDIA_URL}}img/tango/32/status/dialog-information.png">
+    <h2><a href="/help/">Leiðbeiningar</a></h2>
+    <p>Hér má finna leiðbeiningar fyrir tölvupóst og vefsel.</p>
+</div>
+
+
+</div>
+{% endblock %}

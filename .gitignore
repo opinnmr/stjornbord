@@ -1,0 +1,4 @@
+stjornbord.sdb
+settings_prod.py
+*.pem
+*.pyc

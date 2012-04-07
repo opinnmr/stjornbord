@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Leiðbeiningar{% block no_help_title %}: {% block help_title %}{% endblock %}{% endblock %}</h2>
+
+<div id="helpcontent">
+{% block helpcontent %}{% endblock %}
+
+{% block back_link %}<div><p><a href="..">Til baka</a></p></div>{% endblock %}
+</div>
+
+{% endblock %}

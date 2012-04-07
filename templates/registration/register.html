@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Nýskráning nemenda</h2>
+
+<div>
+<p>Vinsamlegast sláðu inn kennitölu:</p>
+<p>&nbsp;</p>
+
+<form method="post" accept-charset="utf-8">
+	<ul>{{ kennitala_form }}</ul>
+
+	{% if username_form %}
+	<ul>
+		<li><label>Nafn:</label> {{ student.get_fullname }}</li>
+		<li><label>Bekkur:</label> {{ student.klass.name }} </li>
+	</ul>
+	
+	<p>Hér fyrir neðan getur þú valið þér notandanafn og lykilorð.
+Tillögurnar eru byggðar á mismunandi samsetningum á nafninu þínu og
+síðustu tveimur tölustöfunum úr árinu.</p>
+	
+	<ul>
+		{{ username_form }}
+		{{ password_form }}
+	</ul>
+	<p><input type="submit" value="Stofna notanda"></p>
+	{% else %}
+	<p><input type="submit" value="Áfram"></p>
+	{% endif %}
+
+</form>
+
+
+
+
+</div>
+
+{% endblock %}

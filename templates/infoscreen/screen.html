@@ -1,0 +1,219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<title>Tilkynningaskjár</title>
+	<script src="/media/jquery-1.6.min.js" type="text/javascript" charset="utf-8"></script>
+	<style type="text/css" media="screen">
+		body {
+			background: #000 url(/media/img/infoscreen/800x600.png) no-repeat;
+			background-size: 1024px 768px;
+			color: #d7d7d7;
+			font-family: Helvetica;
+			margin: 0;
+		}
+		
+		
+		div#announcement {
+			border: 2px solid #d7d7d7;
+			width: 768px;
+			height: 512px;
+			margin: 51px 0 0 97px;
+			padding: 0 26px;
+			background-image: -moz-linear-gradient(45deg, rgba(44, 133, 166, 1), rgba(44, 133, 166, 0));
+		}
+		
+		div#bbox {
+			/* border: 1px solid black; */
+			height: 410px;
+			overflow: hidden;
+		}
+		
+		h1 {
+			letter-spacing: 0.07em;
+			margin-bottom: 0.3em;
+		}
+		
+		p {
+			font-size: 22pt;
+			margin: 0 0 0.6em 0;
+		}
+		
+		li {
+			margin-bottom: 0.8em;
+		}
+		
+		p#signature {
+			float: right;
+			font-style: italic;
+			padding-right: 1em;
+		}
+		
+		div#clock {
+			position: absolute;
+			top: 650px;
+			width: 1024px;
+			text-align: center;
+		}
+		
+		div#clock p {
+			font-size: 25pt;
+			margin: 0.4em;
+		}
+	</style>
+	<script type="text/javascript" charset="utf-8">
+		var months = ["janúar", "febrúar", "mars",
+        "apríl", "maí", "júní", "júlí", "ágúst",
+        "september", "október", "nóvember", "desember", ]
+		
+		var UPDATE_CLOCK_SEC    = 10;
+		var UPDATE_CLONTENT_SEC = 120;
+
+		var SHOW_BEFORE_SCROLL  = 3;
+
+		var content = undefined;
+		var counter = 0;
+		var content_div_offset;
+		
+		function update_clock()
+		{
+			var d = new Date();
+			
+			minutes = d.getMinutes();
+			if (minutes < 10) {
+				minutes = "0"+ minutes;
+			}
+			
+			$("#date").html(d.getDate() +". "+ months[d.getMonth()]);
+			$("#time").html(d.getHours() + ":"+ minutes);
+			
+			setTimeout("update_clock()", UPDATE_CLOCK_SEC * 1000);
+		}
+		
+		function fetch_content()
+		{
+			$.get("/infoscreen/json/", function(data)
+			{
+				if (data) {
+					var start_rotation = (content == undefined);
+					content = data;
+					
+					if (start_rotation) {
+						rotate_content();
+					}
+				}
+			}, "json");
+			
+			setTimeout("fetch_content()", UPDATE_CLONTENT_SEC * 1000);
+		}
+		
+		function rotate_content()
+		{
+			var duration = 1;
+
+			if (content != undefined) {
+				var pos = counter++ % (content.announcements.length + 1)
+			
+				if (pos == 0) {
+					populate_content(
+							"Forföll kennara",
+							compile_absent_html(),
+							"");
+					duration = 7;
+				}
+				else {
+					pos--;
+					populate_content(
+							content.announcements[pos].title,
+							content.announcements[pos].body.replace(/\n/g, "<br>"),
+							content.announcements[pos].signature);
+					duration = content.announcements[pos].duration;
+				}
+			}
+
+			show_slide_for(duration);
+		}
+		
+		function compile_absent_html()
+		{
+			if (content.absent.length == 0) {
+				return "Engin skráð forföll."
+			}
+
+			var html = "<ul>";
+			for (var i = 0; i < content.absent.length; i++) {
+				html += "<li>" + content.absent[i].employee
+
+				if (content.absent[i].subject) {
+					html += ", "+ content.absent[i].subject
+				}
+
+				html += "</li>"
+			}
+			html += "</ul>"
+			return html;
+		}
+		
+		function populate_content(title, body, signature)
+		{
+			$("#title").html(title);
+			$("#body").html(body);
+			$("#signature").html(signature);
+			$("#content").offset(content_div_offset);			
+		}
+
+		function show_slide_for(duration)
+		{
+			if (is_all_visible()) {
+				setTimeout("rotate_content()", duration * 1000);
+			}
+			else {
+				setTimeout("scroll_content("+ duration +")", SHOW_BEFORE_SCROLL * 1000);
+			}
+		}
+
+		function is_all_visible()
+		{
+			var signature_bottom = $("#signature").offset().top + $("#signature").height();
+			var bbox_bottom      = $("#bbox").offset().top    + $("#bbox").height();
+			return (signature_bottom < bbox_bottom);
+		}
+
+		function scroll_content(duration)
+		{
+			if (is_all_visible()) {
+				duration = Math.max(1, duration - SHOW_BEFORE_SCROLL);
+				setTimeout("rotate_content()", duration * 1000);
+			}
+			else {
+				$("#content").offset({'top': $("#content").offset().top - 1, 'left': $("#content").offset().left})
+				setTimeout("scroll_content("+ duration +")", 50);
+			}
+		}
+
+		function start()
+		{
+			fetch_content();
+			update_clock();
+			
+			// Store the initial position
+			content_div_offset = $("#content").offset();
+			content_div_offset.top -= 10; // hack
+		}
+
+	</script>
+</head>
+<body onload="start()">
+
+	<div id="announcement">
+		<h1 id="title">Augnablik</h1>
+		<div id="bbox">
+			<div id="content"><p id="body"></p><p id="signature"></p></div>
+		</div>
+	</div>
+
+	<div id="clock"><p id="date"></p><p id="time"></p></div>
+</body>
+</html>
+
