@@ -1,0 +1,22 @@
+Í þessari möppu eru dæmi um útkeyrslur frá Innu. Athugið að
+útkeyrslan gæti innihaldið fleiri dálka, og í annarri röð,
+og það er í lagi. Mestu máli skiptir að eftirfarandi dálkar
+séu til staðar, í einhverri röð:
+
+	Kennitala
+	Nafn
+	Bekkur
+	Netfang forrm1
+	Netfang forrm2
+
+Þegar ný innuskrá er send inn mun kerfið fyrst gróflega sýna
+áhrif innkeyrslunnar. Það er, fjölda nemenda sem væri bætt
+við, fjölda nemenda sem yrðu merktir sem fyrrverandi og
+fjölda nemenda sem væri breytt. Athugið að fjöldi breyttra
+nemenda getur verið mjög hár, sér í lagi við upphaf nýs
+skólaárs þar sem flestir nemendur hafa skipt um bekk.
+
+Hægt er að prufa sig áfram með því að senda fyrst inn skránna
+inna_year1.csv, sem bætir við tveimur nemendur, og svo
+skránna inna_year2.csv sem bætir við einu, uppfærir annan og
+merkir þriðja sem fyrrverandi.
