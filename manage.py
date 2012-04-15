@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 
-# hack (bjorn)
-import sys
-sys.path.insert(0, "../lib")
-
 from django.core.management import execute_manager
 try:
     import settings # Assumed to be in the same directory.

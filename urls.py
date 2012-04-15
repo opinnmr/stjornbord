@@ -6,7 +6,6 @@ import stjornbord.student.views
 import stjornbord.user.views
 import stjornbord.ou.views
 import stjornbord.devices.views
-import stjornbord.saml2idp.views
 import stjornbord.infoscreen.views
 import settings
 
@@ -52,8 +51,6 @@ urlpatterns = patterns('',
     (r'^infoscreen/rss/$',      stjornbord.infoscreen.views.AbsentEmployesRss()),
     (r'^infoscreen/atom/$',     stjornbord.infoscreen.views.AbsentEmployesAtom()),
 
-    (r'^sso/$', stjornbord.saml2idp.views.assertView),
-
     # This should one day either be moved to flatpages or made somehow more dynamic
     (r'^help/$',                 direct_to_template, {'template': 'help/index.html'}),
     (r'^help/change_password/$', direct_to_template, {'template': 'help/change_password.html'}),
@@ -61,6 +58,20 @@ urlpatterns = patterns('',
     (r'^help/export_mail/$',     direct_to_template, {'template': 'help/export_mail.html'}),
     (r'^help/printquota/$',     direct_to_template, {'template': 'help/printquota.html'}),
 
-    (r'^media/(?P<path>.*)$',  'django.views.static.serve',    {'document_root': settings.MEDIA_ROOT}),
     (r'^admin/(.*)', admin.site.root),
 )
+
+# Only load the SSO module if enabled. This pulls in saml2 and xmlsec dependencies.
+if settings.GOOGLE_SSO_ENABLE:
+    import stjornbord.saml2idp.views
+    sso_action = (r'^sso/$', stjornbord.saml2idp.views.assertView)
+else:
+    sso_action = (r'^sso/$', direct_to_template, {'template': 'registration/sso_disabled.html'})
+urlpatterns += patterns('', sso_action)
+
+
+# Serve static media when in debug mode.
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        (r'^media/(?P<path>.*)$',  'django.views.static.serve',    {'document_root': settings.MEDIA_ROOT}),
+    )

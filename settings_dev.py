@@ -10,6 +10,7 @@ SECRET_KEY = 'devsecretkey123'
 SYNC_SECRET = "devsecret123"
 
 # Google API username/pass 
+GOOGLE_SSO_ENABLE = False
 GOOGLE_API_USER = "dontsync@example.com"
 GOGGLE_API_PASS = "dontsync"
 
