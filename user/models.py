@@ -94,7 +94,7 @@ class ReserverdUsername(models.Model):
     
     def save(self):
         # Force username validation. See User's comments
-        validate_username(username, self)
+        validate_username(self.username, self)
         models.Model.save(self)
 
 class PosixGroup(models.Model):
@@ -148,7 +148,7 @@ class UserProfile(models.Model):
     posix_groups    = models.ManyToManyField(PosixGroup, blank=True)
 
     tmppass         = models.CharField(max_length=80, blank=True)
-    inipa           = models.IntegerField(blank=True)
+    inipa           = models.IntegerField(blank=True, default=0)
 
     def set_password(self, raw_password):
         # Set password for Django's auth user model, without a salt.

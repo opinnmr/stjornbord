@@ -1,3 +1,4 @@
+#coding: utf-8
 from django.db import models
 from django.forms import fields
 from stjornbord.settings import LAN_DOMAIN
@@ -55,15 +56,14 @@ class Subdomain(models.Model):
     dns  = models.CharField(max_length=20)
     
     def __unicode__(self):
-        return self.dns
+        return "%s (%s)" % (self.dns, self.name)
 
 class Prefix(models.Model):
     name      = models.CharField(max_length=100)
     dns       = models.CharField(max_length=20)
-    subdomain = models.ForeignKey(Subdomain)
     
     def __unicode__(self):
-        return self.dns
+        return "%s (%s)" % (self.dns, self.name)
 
 class Vlan(models.Model):
     name    = models.CharField(max_length=100)
@@ -76,10 +76,10 @@ class Device(models.Model):
     subdomain = models.ForeignKey(Subdomain)
     prefix    = models.ForeignKey(Prefix)
     vlan      = models.ForeignKey(Vlan)
-    name      = models.CharField(max_length=10, blank=True)
+    name      = models.CharField(max_length=10, blank=True, help_text=u"Fyllist út sjálfkrafa")
     tag       = models.CharField(max_length=20, blank=True)
     description= models.CharField(max_length=150, blank=True)
-    ipaddr    = models.IPAddressField(unique=True, blank=True)
+    ipaddr    = models.IPAddressField(unique=True, blank=True, help_text=u"Fyllist út sjálfkrafa")
     hwaddr    = MACAddressField()
 
     created = models.DateTimeField(auto_now_add=True)

@@ -5,7 +5,7 @@ class UploadForm(forms.Form):
     """
     Form used uploading inna file to server
     """
-    inna_file   = forms.FileField()
+    inna_file   = forms.FileField(label=u"Útkeyrsla úr Innu")
 
 class UserForm(forms.Form):
     """
