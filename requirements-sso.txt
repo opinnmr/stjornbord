@@ -1,0 +1,41 @@
+# These are required for the Google SSO
+
+# Before processing this file, please make sure to have the xmlsec and
+# python-libxml2 packages installed.
+#
+# On Ubuntu/Debian, try:
+#  sudo apt-get install python-libxml2 subversion libxmlsec1-dev python-dev
+#
+# On Mac OS X, using MacPorts, try:
+#  sudo port install py-libxml2 xmlsec
+#  (Note that you may want to install py26-libxml2 or py27-libxml2, depending
+#   on which Python version you're using)
+#
+# Once these dependencies have been installed, process this requirements
+# file:
+#
+#    pip install -r requirements-sso.txt
+#
+# Finally, you need you link the libxml2 to you virtual environment. This is
+# done by creating a libxml2.pth file in your virtenv's site-package's
+# directory that points to your general site-packages directory. For example,
+# the followng works on my Mac:
+#
+#  1) Determine where your libxml2 module is stored
+#    $ python2.7    (not within the virtenv)
+#    >>> import libxml2
+#    >>> import os.path
+#    >>> os.path.dirname(libxml2.__file__)
+#    '/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages'
+#
+#  2) Enter your virtualenv and create the libxml2.pth file 
+#    $ cd /path/to/virtenv/mr-test
+#    $ source bin/activate
+#    (mrtest-sso)$ echo /opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/ > lib/python2.7/site-packages/libxml2.pth
+#
+#  3) If you know a better way of doing this, please let me know!
+
+
+# PyXMLSec note: we need r365 which is in SVN but has not been released
+svn+svn://labs.libre-entreprise.org/svnroot/pyxmlsec/trunk
+svn+http://python-saml2.googlecode.com/svn/trunk/
