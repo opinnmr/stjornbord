@@ -1,4 +1,4 @@
 # Base requirements
-Django==1.2.3
+Django==1.2.7
 simplejson
 gdata
