@@ -24,39 +24,39 @@ Við notumst við sýndarumhverfi ([virtual environment](http://pypi.python.org/
 
 Hægt er að nota Python sem fylgir OS X, en sækja þarf [Command Line Tools for Xcode](http://developer.apple.com/downloads).
 
-	$ sudo easy_install virtualenv
-	$ sudo easy_install pip
+    $ sudo easy_install virtualenv
+    $ sudo easy_install pip
 
 ### Leið 2: Nota MacPorts
 
 Ef þú notar [MacPorts](http://www.macports.org/) og vilt heldur nota Python útgáfu sem þú hefur sett upp á þann veg, getur þú notað eitthvað í líkingu við (mv. Python 2.7)
 
-	$ sudo port install py27-virtualenv py27-pip
+    $ sudo port install py27-virtualenv py27-pip
 
 
 ## Uppsetning þróunarumhverfis
 
 Búum til sýnarumhverfi fyrir Stjórnborðið:
 
-	casanova:~$ virtualenv mr-test
-	New python executable in mr-test/bin/python
-	Installing distribute.....done.
-	Installing pip...done.
+    casanova:~$ virtualenv mr-test
+    New python executable in mr-test/bin/python
+    Installing distribute.....done.
+    Installing pip...done.
 
 Förum inn í sýndarumhverfið og virkjum það. Við það breytist command prompt línan.
 
-	casanova:~$ cd mr-test/
-	casanova:~/mr-test$ source bin/activate
-	
-	(mr-test)casanova:~/mr-test$
+    casanova:~$ cd mr-test/
+    casanova:~/mr-test$ source bin/activate
+    
+    (mr-test)casanova:~/mr-test$
 
 Sækjum Stjórnborðið:
 
-	(mr-test)casanova:~/mr-test$ git clone git://github.com/opinnmr/stjornbord.git
+    (mr-test)casanova:~/mr-test$ git clone git://github.com/opinnmr/stjornbord.git
 
 Þetta sækir nýjustu útgáfu af Stjórnborðinu og setur hana í möppuna `stjornbord`. Ásamt kóðanum er sótt skráin `requirements.txt`, en hana er hægt að nota til að setja upp pakka sem Stjórnborðið styðst við.
 
-	(mr-test)casanova:~/mr-test$ pip install -r stjornbord/requirements.txt
+    (mr-test)casanova:~/mr-test$ pip install -r stjornbord/requirements.txt
 
 Nú er uppsetningu lokið og næst er að ræsa Stjórnborðið (sjá neðar).
 
@@ -72,36 +72,36 @@ Við gerum ráð fyrir því að allar skipanir hér fyrir neðan séu keyrar in
 
 Ef þú ert ekki inni í sýndarumhverfinu getur þú alltaf komist inn í það með því að túlka bin/activate skjalið:
 
-	casanova:~$ cd mr-test/
-	casanova:~/mr-test$ source bin/activate
-	(mr-test)casanova:~/mr-test$ 
+    casanova:~$ cd mr-test/
+    casanova:~/mr-test$ source bin/activate
+    (mr-test)casanova:~/mr-test$ 
 
 
 ## Fyrsta skipti
 
 Í fyrsta skipti sem Stjórnborðið er ræst þarf að búa til gagnagrunn. Django hjálpar okkur við það. Þegar við keyrum eftirfarandi skipun erum við spurð hvort stofna eigi superuser. Við svörum því játandi og fylgjum leiðbeiningum á skjá til að stofna ofur notanda.
 
-	(mr-test)casanova:~/mr-test$ cd stjornbord/
-	(mr-test)casanova:~/mr-test/stjornbord$ python manage.py syncdb
+    (mr-test)casanova:~/mr-test$ cd stjornbord/
+    (mr-test)casanova:~/mr-test/stjornbord$ python manage.py syncdb
 
 Eftir þetta hefur SQLite gagnagrunnurinn okkar verið búinn til. Hann ætti að vera í skrá sem heitir `stjornbord.sdb`. Hann mun innihalda grunnupplýsingar til að hægt sé að nota kerfið.
 
 Ef þú vilt örlitlar auka upplýsingar (dæmi um starfsmann og tæki) getur þú hlaðið inn demo gögnum, en þetta er valfrjálst:
 
-	(mr-test)casanova:~/mr-test/stjornbord$ python manage.py loaddata */fixtures/demo_data.json
+    (mr-test)casanova:~/mr-test/stjornbord$ python manage.py loaddata */fixtures/demo_data.json
 
 
 ## Ræsa vefviðmót
 
 Til að ræsa vefviðmót Stjórnborðsins keyrum við eftirfarandi skipun (pössum að vera í sýndarumhverfinu):
 
-	(mr-test)casanova:~/mr-test/stjornbord$ python manage.py runserver
-	Validating models...
-	0 errors found
+    (mr-test)casanova:~/mr-test/stjornbord$ python manage.py runserver
+    Validating models...
+    0 errors found
 
-	Django version 1.2.7, using settings 'stjornbord.settings'
-	Development server is running at http://127.0.0.1:8000/
-	Quit the server with CONTROL-C.
+    Django version 1.2.7, using settings 'stjornbord.settings'
+    Development server is running at http://127.0.0.1:8000/
+    Quit the server with CONTROL-C.
 
 
 Nú ættir þú að geta beint vafranum þínum á [http://127.0.0.1:8000/](http://127.0.0.1:8000/) og skráð þig inn í Stjórnborðið!
@@ -114,10 +114,11 @@ Líkt og drepið var á í innganginum, þá sér Stjórnborðið sjálft ekki u
 # Single-Sign-On stuðningur
 
 Stuttlega: til að virkja Single-Sign-On stuðning þarf að:
- * Setja upp `python-libxml2` og `xmlsec`. Það er best gert gegnum `apt-get`, `yum`, MacPorts, Homebrew eða einhverskonar pakkakerfi.
- * Keyra `requirements-sso.txt` í gegnum pip (muna að vera inni í virtualenv). Inni í þessari skrá eru einnig leiðbeiningar um hvernig vísa má libxml2 í global site-packages.
- * Búa til public/private lykla og vista þá í ssokeys möppuna sem `rsacert.pem`, `rsaprivkey.pem` og `rsapubkey.pem`.
- * Setja `GOOGLE_SSO_ENABLE = True` í `settings_dev.py`
+
+* Setja upp `python-libxml2` og `xmlsec`. Það er best gert gegnum `apt-get`, `yum`, MacPorts, Homebrew eða einhverskonar pakkakerfi.
+* Keyra `requirements-sso.txt` í gegnum pip (muna að vera inni í virtualenv). Inni í þessari skrá eru einnig leiðbeiningar um hvernig vísa má libxml2 í global site-packages.
+* Búa til public/private lykla og vista þá í ssokeys möppuna sem `rsacert.pem`, `rsaprivkey.pem` og `rsapubkey.pem`.
+* Setja `GOOGLE_SSO_ENABLE = True` í `settings_dev.py`
 
 
 # Villur og vesen
