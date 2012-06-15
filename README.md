@@ -38,7 +38,7 @@ Ef þú notar [MacPorts](http://www.macports.org/) og vilt heldur nota Python ú
 
 Búum til sýnarumhverfi fyrir Stjórnborðið:
 
-    casanova:~$ virtualenv mr-test
+    casanova:~$ virtualenv --no-site-packages mr-test
     New python executable in mr-test/bin/python
     Installing distribute.....done.
     Installing pip...done.
