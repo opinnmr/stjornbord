@@ -11,9 +11,13 @@ class SubdomainAdmin(admin.ModelAdmin):
 class VlanAdmin(admin.ModelAdmin):
     list_display = ('name', 'network')
 
+class DeviceAdmin(admin.ModelAdmin):
+    list_filter  = ('subdomain', 'prefix', 'vlan', )
+    search_fields = ('name',)
+
 admin.site.register(Subdomain, SubdomainAdmin)
 admin.site.register(Prefix, PrefixAdmin)
 admin.site.register(Vlan, VlanAdmin)
-admin.site.register(Device)
+admin.site.register(Device, DeviceAdmin)
 admin.site.register(Counter)
 
