@@ -13,7 +13,7 @@ class VlanAdmin(admin.ModelAdmin):
 
 class DeviceAdmin(admin.ModelAdmin):
     list_filter  = ('subdomain', 'prefix', 'vlan', )
-    search_fields = ('name',)
+    search_fields = ('name', 'hwaddr', )
 
 admin.site.register(Subdomain, SubdomainAdmin)
 admin.site.register(Prefix, PrefixAdmin)

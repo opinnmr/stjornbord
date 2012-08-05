@@ -10,9 +10,8 @@ IP_RANGE = (100, 200)
 
 # Mac Address field
 # http://djangosnippets.org/snippets/1337/
-# Modified: enforce upper case A-F
 
-MAC_RE = r'^([0-9A-F]{2}(:?|$)){6}$'
+MAC_RE = r'^([0-9a-fA-F]{2}(:?|$)){6}$'
 mac_re = re.compile(MAC_RE)
 
 class MACAddressFormField(fields.RegexField):
@@ -86,6 +85,10 @@ class Device(models.Model):
     updated = models.DateTimeField(auto_now=True)
     
     def save(self, *args, **kwargs):
+        # Store all MACs and hostnames as lower-case
+        self.hwaddr = self.hwaddr.lower()
+        self.name   = self.name.lower()
+        
         # Get the first available IP address in this network
         if not self.ipaddr:
             self.ipaddr = get_next_ip(self.vlan)
