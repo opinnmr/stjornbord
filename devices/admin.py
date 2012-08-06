@@ -12,7 +12,7 @@ class VlanAdmin(admin.ModelAdmin):
     list_display = ('name', 'network')
 
 class DeviceAdmin(admin.ModelAdmin):
-    list_display = ('get_fqdn', 'tag', 'description', 'active', )
+    list_display = ('get_fqdn', 'description', 'tag', 'vlan', 'active', )
     list_filter  = ('active', 'subdomain', 'prefix', 'vlan', )
     search_fields = ('name', 'hwaddr', 'tag', 'description', )
 
