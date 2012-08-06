@@ -9,7 +9,7 @@ from stjornbord.utils import verify_sync_secret
 @csrf_exempt
 @verify_sync_secret
 def export(request):
-    devices = Device.objects.select_related()
+    devices = Device.objects.filter(active=True).select_related()
     response = HttpResponse(mimetype="text/plain")
 
     # TODO: Use JSON

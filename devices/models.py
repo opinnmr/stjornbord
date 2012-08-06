@@ -80,6 +80,7 @@ class Device(models.Model):
     description= models.CharField(max_length=150, blank=True)
     ipaddr    = models.IPAddressField(unique=True, blank=True, help_text=u"Fyllist út sjálfkrafa")
     hwaddr    = MACAddressField()
+    active    = models.BooleanField(default=True)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

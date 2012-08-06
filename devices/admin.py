@@ -12,8 +12,9 @@ class VlanAdmin(admin.ModelAdmin):
     list_display = ('name', 'network')
 
 class DeviceAdmin(admin.ModelAdmin):
-    list_filter  = ('subdomain', 'prefix', 'vlan', )
-    search_fields = ('name', 'hwaddr', )
+    list_display = ('get_fqdn', 'tag', 'description', 'active', )
+    list_filter  = ('active', 'subdomain', 'prefix', 'vlan', )
+    search_fields = ('name', 'hwaddr', 'tag', 'description', )
 
 admin.site.register(Subdomain, SubdomainAdmin)
 admin.site.register(Prefix, PrefixAdmin)
