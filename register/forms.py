@@ -1,6 +1,9 @@
 #coding: utf-8
 from django import forms
 
+from stjornbord.student.models import Student
+from stjornbord.user.models import INACTIVE_USER
+
 class UsernameForm(forms.Form):
     username    = forms.ChoiceField(widget=forms.RadioSelect, required=True, label="Notandanafn")
 
