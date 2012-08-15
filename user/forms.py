@@ -43,12 +43,25 @@ def clean_username(form_object, current_holder=None):
                     current_holder=current_holder
                     )
 
+PASSWORD_MIN_LENGTH = 8
+
 def _clean_password(self):
     """
     Verify that passwords match
     """
     if self.data['password'] != self.data['password2']:
         raise forms.ValidationError("Lykilorð stemma ekki")
+    
+    password = self.data['password']
+    if len(password) < PASSWORD_MIN_LENGTH:
+        raise forms.ValidationError("Lykilorðið þarf að vera minnst %d stafir" % PASSWORD_MIN_LENGTH)
+
+    # Copied from http://stackoverflow.com/questions/5226329/enforcing-password-strength-requirements-with-django-contrib-auth-views-password
+    first_isalpha = password[0].isalpha()
+    if all(c.isalpha() == first_isalpha for c in password):
+        raise forms.ValidationError("Lykilorðið þarf að innihalda amk einn bókstaf og "
+                    "einn tölustaf eða greinarmerki.")
+    
     return self.data['password']
 
 # Note: This form is also used when new students are registering for
