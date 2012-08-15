@@ -11,6 +11,10 @@ from stjornbord.ou.models import Status
 from stjornbord.user.models import UserStatus
 
 FIELDS = ["Kennitala", "Nafn", "Bekkur", "Netfang forrm1", "Netfang forrm2"]
+HEADER_TOKEN = "Kennitala"
+DELIMITER = "\t"
+
+class InnaParserException(Exception): pass
 
 class InnaParser(object):
     def __init__(self, filename, pretend = True):
@@ -35,11 +39,13 @@ class InnaParser(object):
         # Define the fields I am interested in extracting
         field_map   = dict.fromkeys(FIELDS)
 
-        # Scroll down to the first line including a semi-colon. This is the
-        # header line. 
+        # Find the header line. This is typically line two or three, and we
+        # assume it's the first one that includes the required "Kennitala"
+        # (HEADER_TOKEN) field.
+        available_fields = []
         for line in inna:
-            if ";" in line:
-                available_fields = line.strip().split(";")
+            if HEADER_TOKEN in line:
+                available_fields = line.strip().split(DELIMITER)
                 break
 
         # Run through my wanted field list and find it's index number.
@@ -50,7 +56,7 @@ class InnaParser(object):
             try:
                 field_map[field] = available_fields.index(field)
             except ValueError, e:
-                raise Exception("Could not find %s in list of fields" % field)
+                raise InnaParserException("Could not find '%s' in list of fields" % field)
 
         # Scroll through the rest of the file extracting the fields we are
         # interested in. Create a new data structure only containing fields
@@ -59,7 +65,7 @@ class InnaParser(object):
         for line in inna:
             line = line.strip()
             if line:
-                line = line.split(";")
+                line = line.split(DELIMITER)
                 student = []
                 for field in FIELDS:
                     student.append(line[field_map[field]])

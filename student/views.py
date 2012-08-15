@@ -4,12 +4,13 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import user_passes_test
 from django.views.generic.list_detail import object_list
+from django import forms
 
 import hashlib, datetime, os.path, random
 
 from stjornbord.settings import INNA_ROOT
 from stjornbord.utils import prep_tmp_dir
-from stjornbord.student.parser import InnaParser
+from stjornbord.student.parser import InnaParser, InnaParserException
 from stjornbord.student.models import Student, Klass
 from stjornbord.ou.models import Status
 from stjornbord.user.models import UserProfile
@@ -43,11 +44,16 @@ def inna_import(request, filename):
             pretend = False
     
     ip = InnaParser(os.path.join(INNA_ROOT, "%s.csv" % filename), pretend=pretend)
-    ip.update()
+    
+    error = None
+    try:
+        ip.update()
+    except InnaParserException, e:
+        error = e.message
 
     if pretend:
         return render_to_response('student/inna_import.html',
-            { 'pretend': pretend, 'stats': ip.stats },
+            { 'pretend': pretend, 'stats': ip.stats, 'error': error },
             context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect('/')
