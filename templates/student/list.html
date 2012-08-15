@@ -22,10 +22,10 @@
 <table>
 	<thead>
 	<tr>
-		<th width="25%">Kennitala</th>
-		<th width="50%">Bekkur</th>
-		<th width="50%">Nafn</th>
-		<th width="20%">Notandi</th>
+		<th width="100">Kennitala</th>
+		<th width="300">Nafn</th>
+		<th width="80">Bekkur</th>
+		<th width="180">Notandi</th>
 	</tr>
 	</thead>
 	<tbody>
@@ -36,6 +36,7 @@
 		<td>{{ student.klass.name }}</td>
 		<td>
 			{% for user in student.userp.all %}
+				{% if user.dirty %}<img src="{{ MEDIA_URL }}img/tango/16/actions/appointment-new.png" title="Notandi bíður uppfærslu.">{% endif %}
 				<a href="{{ user.get_absolute_url }}printquota/"><img src="{{ MEDIA_URL }}img/tango/16/actions/document-print.png"></a>
 				<span{% if not user.status.active %} class="strikethrough"{% endif %}><a href="{{ user.get_absolute_url }}">{{ user }}</a></span>
 				<br>

@@ -55,12 +55,14 @@
 	<table>
 		<thead>
 		<tr>
-			<th width="25%">Kennitala</th>
-			<th width="50%">Nafn</th>
-			<th width="5%"></th>
-			<th width="20%">Notendur</th>
-			<th width="5%"></th>
-			<th width="20%">Listar</th>
+			<th width="100">Kennitala</th>
+			<th width="260">Nafn</th>
+			<th width="20"></th>
+			<th width="90">Notendur</th>
+			<th width="20"></th>
+			<th width="90">Listar</th>
+
+
 		</tr>
 		</thead>
 		<tbody>
@@ -71,6 +73,7 @@
 			<td><a href="{{ ou.get_absolute_url }}add_user/"><img src="{{MEDIA_URL}}img/tango/16/actions/list-add.png"></td>
 			<td>
 				{% for user in ou.userp.all %}
+					{% if user.dirty %}<img src="{{ MEDIA_URL }}img/tango/16/actions/appointment-new.png" title="Notandi bíður uppfærslu">{% endif %}
 					<span{% if not user.status.active %} class="strikethrough"{% endif %}><a href="{{ user.get_absolute_url }}">{{ user }}</a></span><br>
 				{% endfor %}
 			</td>
@@ -100,5 +103,11 @@
 		{% endif %}
 	</div>
 {% endifnotequal %}
+
+<p>&nbsp;</p>
+<p>Klukkutáknið <img src="{{ MEDIA_URL }}img/tango/16/actions/appointment-new.png" title="Notandi bíður uppfærslu">
+	gefur til kynna að búið sé að breyta notanda í Stjórnborðinu, en enn eigi eftir að uppfæra netkerfið sjálft.
+	Það gerist almennt sjálfkrafa á nokkrum mínútum. Sé klukkumerkið lengi er ráðlegt að hafa samband við
+	kerfisstjóra.</p>
 
 {% endblock %}
