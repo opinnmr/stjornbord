@@ -2,8 +2,7 @@
 This script synchronizes mailinglists stored at Google.
 """
 
-import os,sys
-sys.path.append("/home/www/django")
+import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'stjornbord.settings'
 
 from stjornbord.ou.models import OrganizationalUnit
@@ -19,20 +18,20 @@ adrirstm = OrganizationalUnit.objects.filter(group=2, status__active=1)
 
 kennarar_members = []
 for k in kennarar:
-    for user in k.user.filter(status=1):
-        kennarar_members.append("%s@mr.is" % user.username)
+    for userp in k.userp.filter(status=1).select_related(depth=1):
+        kennarar_members.append("%s@mr.is" % userp.user.username)
 
 starfsmenn_members = kennarar_members[:]
 for s in adrirstm:
-    for user in s.user.filter(status=1):
-        starfsmenn_members.append("%s@mr.is" % user.username)
+    for userp in s.userp.filter(status=1).select_related(depth=1):
+        starfsmenn_members.append("%s@mr.is" % userp.user.username)
 
 google.list_sync("kennarar", kennarar_members)
 google.list_sync("starfsmenn", starfsmenn_members)
 
 ####
 # Sync class mailinglists
- klasses = Klass.objects.all()
+klasses = Klass.objects.all()
 for klass in klasses:
     username = klass.name.lower().replace(".", "")
     members = []
@@ -45,8 +44,8 @@ for klass in klasses:
     # exception
     int(username[0])
 
-    for student in klass.students.filter(status=1):     # not status__active as we don't want
-        for user in student.user.filter(status=1):      # student on leave
-            members.append("%s@mr.is" % user.username)
+    for student in klass.students.filter(status=1):  # not status__active as we don't want
+        for userp in student.userp.filter(status=1).select_related(depth=1):  # student on leave
+            members.append("%s@mr.is" % userp.user.username)
 
     google.list_sync(username, members)

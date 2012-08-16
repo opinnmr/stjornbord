@@ -1,3 +1,7 @@
+# Development settings
+DEBUG           = True
+TEMPLATE_DEBUG  = True
+
 # Database settings
 DATABASE_ENGINE = 'sqlite3'
 DATABASE_NAME   = 'stjornbord.sdb'
@@ -10,13 +14,11 @@ SECRET_KEY = 'devsecretkey123'
 SYNC_SECRET = "devsecret123"
 
 # Google API username/pass 
+UPDATE_GOOGLE   = False
 GOOGLE_SSO_ENABLE = False
 GOOGLE_API_USER = "dontsync@example.com"
-GOGGLE_API_PASS = "dontsync"
-
-GOOGLE_API_USER = "adminapi@mr.is"
-GOGGLE_API_PASS = "19876d63ed26d89cf1ec0e4"
+GOOGLE_API_PASS = "dontsync"
 GOOGLE_TMP_DIR = "/tmp/stjornbord/google/"
 
 # Temorary directory for Inna student files
-INNA_ROOT = "tmp/stjornbord/inna/"
+INNA_ROOT = "/tmp/stjornbord/inna/"

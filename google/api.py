@@ -44,7 +44,7 @@ class Google(object):
 
             # If not, log in, get the token and cache to disk
             else:
-                self.service.ClientLogin(username=settings.GOOGLE_API_USER, account_type='HOSTED', service='apps', password=settings.GOGGLE_API_PASS)
+                self.service.ClientLogin(username=settings.GOOGLE_API_USER, account_type='HOSTED', service='apps', password=settings.GOOGLE_API_PASS)
                 auth_token = {
                     'timestamp': datetime.datetime.now(),
                     'token':     self.service.GetClientLoginToken()

@@ -1,20 +1,12 @@
 import os, platform
 
-DEVELOPMENT_MODE = ("athena" not in platform.node())
-
 ADMINS      = (("bjorn swift", "bjorn@mr.is"),)
 MANAGERS    = ADMINS
 
-if DEVELOPMENT_MODE:
-    from settings_dev import *
-    DEBUG           = True
-    TEMPLATE_DEBUG  = True
-    UPDATE_GOOGLE   = False
-else:
+try:
     from settings_prod import *
-    DEBUG               = False
-    TEMPLATE_DEBUG      = False
-    UPDATE_GOOGLE       = True
+except ImportError:
+    from settings_dev import *
 
 
 # Template and media directories populated automatically
