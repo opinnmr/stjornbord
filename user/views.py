@@ -75,5 +75,5 @@ def sync_get_dirty(request):
 def sync_clean_dirty(request, username, timestamp):
     user = get_object_or_404(User, username=username)
     response = HttpResponse("ok", mimetype="text/plain")
-    user.clear_dirty(timestamp)
+    user.get_profile().clear_dirty(timestamp)
     return response

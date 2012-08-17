@@ -49,6 +49,14 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.transaction.TransactionMiddleware',
 )
 
+PASSWORD_HASHERS = (
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.BCryptPasswordHasher',
+    'stjornbord.user.auth.SaltlessSHA1PasswordHasher',
+)
+
+
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',

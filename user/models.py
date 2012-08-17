@@ -137,6 +137,7 @@ class UserProfile(models.Model):
     def set_password(self, raw_password):
         # Update password on the django side.
         self.user.set_password(raw_password)
+        self.user.save()
         
         # Temporarily store password in clear text, for authentication
         # backend. For Google Apps, we can use sha1, but for FreeIPA we
@@ -154,7 +155,7 @@ class UserProfile(models.Model):
     def clear_dirty(self, timestamp):
         from django.db import connection, transaction
         cursor = connection.cursor()
-        cursor.execute("UPDATE user_userprofile SET dirty = 0, tmppass = '' WHERE user_id = %s AND dirty = %s", (self.id, timestamp))
+        cursor.execute("UPDATE user_userprofile SET dirty = 0, tmppass = '' WHERE id = %s AND dirty = %s", (self.id, timestamp))
         transaction.commit_unless_managed()
 
     def set_deactivate(self):
