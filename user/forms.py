@@ -67,15 +67,15 @@ def _clean_password(self):
 # Note: This form is also used when new students are registering for
 # accounts. Handle with care!
 class PasswordForm(forms.Form):
-    password        = forms.CharField(widget=forms.PasswordInput(), label="Lykilorð")
-    password2       = forms.CharField(widget=forms.PasswordInput(), label="Lykilorð, aftur")
+    password        = forms.CharField(widget=forms.PasswordInput(render_value=False), label="Lykilorð")
+    password2       = forms.CharField(widget=forms.PasswordInput(render_value=False), label="Lykilorð, aftur")
     
     clean_password = _clean_password
 
 class ChangePasswordForm(forms.Form):
-    current         = forms.CharField(widget=forms.PasswordInput(), label="Núverandi lykilorð")
-    password        = forms.CharField(widget=forms.PasswordInput(), label="Nýtt lykilorð")
-    password2       = forms.CharField(widget=forms.PasswordInput(), label="Nýtt lykilorð, aftur")
+    current         = forms.CharField(widget=forms.PasswordInput(render_value=False), label="Núverandi lykilorð")
+    password        = forms.CharField(widget=forms.PasswordInput(render_value=False), label="Nýtt lykilorð")
+    password2       = forms.CharField(widget=forms.PasswordInput(render_value=False), label="Nýtt lykilorð, aftur")
 
     clean_password  = _clean_password
 
