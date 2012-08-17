@@ -54,17 +54,16 @@ def _generic_ou_list(request, model, filter_items, template_name):
 
 @user_passes_test(lambda u: u.is_superuser)
 def add(request):
-    return edit(request)
+    return _edit_ou(request)
 
 
 @user_passes_test(lambda u: u.is_superuser)
 def change(request, kennitala):
     ou = get_object_or_404(OrganizationalUnit, pk=kennitala)
-    return edit(request, ou)
+    return _edit_ou(request, ou)
 
 
-@user_passes_test(lambda u: u.is_superuser)
-def edit(request, ou=None):
+def _edit_ou(request, ou=None):
     """
     Edit this Organizational unit
     """

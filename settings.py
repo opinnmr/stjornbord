@@ -1,6 +1,6 @@
-import os, platform
+import os
 
-ADMINS      = (("bjorn swift", "bjorn@mr.is"),)
+ADMINS      = (("bjorn swift", "bjorn@swift.is"),)
 MANAGERS    = ADMINS
 
 try:
@@ -13,10 +13,9 @@ except ImportError:
 # from current dir. Makes this work on development
 # machines as well as staging server
 TEMPLATE_DIRS       = [os.path.join(os.path.dirname(__file__), "templates")]
-MEDIA_ROOT          = os.path.join(os.path.dirname(__file__), "media")
 
-ADMIN_MEDIA_PREFIX  = '/admin_media/'
-MEDIA_URL           = '/media/'
+STATICFILES_DIRS = (os.path.join(os.path.dirname(__file__), "media"), )
+STATIC_URL       = "/media/"
 
 # Locale stuff. No official locale support (translations)
 USE_I18N        = False
@@ -33,19 +32,20 @@ ROOT_URLCONF    = 'stjornbord.urls'
 
 # Adding request preprocessor and removing i18n
 TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.core.context_processors.auth',
+    'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
-    'django.core.context_processors.media',
+    'django.core.context_processors.static',
     'django.core.context_processors.request',
+    'django.contrib.messages.context_processors.messages',
 )
 
 # Overriding MIDDLEWARE since we want transactions
 MIDDLEWARE_CLASSES = (
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.middleware.csrf.CsrfResponseMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
 )
 
@@ -55,6 +55,8 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
     'stjornbord.user',
     'stjornbord.ou',
     'stjornbord.student',
@@ -76,7 +78,3 @@ LAN_DOMAIN = "mr.lan"
 MRNET_IP = "82.148.70.66"
 
 AUTHENTICATION_BACKENDS = ('stjornbord.user.backend.TrimDomainBackend',)
-
-SAML2IDP_PRIVATE_KEY_FILE = os.path.join(os.path.dirname(__file__), "ssokeys", "rsaprivkey.pem")
-SAML2IDP_CERTIFICATE_FILE = os.path.join(os.path.dirname(__file__), "ssokeys", "rsacert.pem")
-

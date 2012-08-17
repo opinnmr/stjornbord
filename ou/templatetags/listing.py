@@ -1,5 +1,4 @@
 from django import template
-from stjornbord.settings import MEDIA_URL
 register = template.Library()
 
 @register.inclusion_tag('ou/filter.html', takes_context=True)

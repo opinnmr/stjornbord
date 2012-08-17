@@ -9,6 +9,7 @@
 		<li style="color: black;"><label>Staða:</label> {{ user.status.name }}</li>
 		<li style="color: black;"><label>Verður lokað:</label> {% firstof user.deactivate "" %}</li>
 	</ul>
+	{% csrf_token %}
 </form>
 
 {% endblock %}

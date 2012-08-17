@@ -76,6 +76,9 @@ def update_associated_users(newme):
     
     If the user is moving from an inactive state to an active state, and has
     users which are awaiting closure, those user accounts are reactivated.
+    
+    TODO: Currently, disabled/deleted users are not recreated. We may want
+    to re-enable disabled users.
     """
     try:
         oldme = newme.__class__.objects.get(pk=newme.pk)

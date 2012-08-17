@@ -13,7 +13,15 @@
 {% endif %}
 
 <form method="post">
-	<ul>{{form}}</ul>
+	<ul>
+		{{form}}
+
+		{% if userp.deactivate %}
+			<li style="color: black;"><label>Verður lokað:</label> {{ userp.deactivate }}&nbsp;</li>
+		{% endif %}
+	</ul>
 	<input type="submit" value="Vista">
+	
+	{% csrf_token %}
 </form>
 {% endblock %}

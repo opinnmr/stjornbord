@@ -21,6 +21,7 @@
 
 	<form method="post">
 		<p><input type="submit" name="commit" value="Breyta í gagnagrunni"></p>
+		{% csrf_token %}
 	</form>
 
 	<a href="/">Hætta við</a>

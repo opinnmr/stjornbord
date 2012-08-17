@@ -1,6 +1,8 @@
 from django.conf.urls.defaults import *
 from django.views.generic.simple import direct_to_template
 from django.contrib import admin
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
 import stjornbord.register.views
 import stjornbord.student.views
 import stjornbord.user.views
@@ -58,7 +60,7 @@ urlpatterns = patterns('',
     (r'^help/export_mail/$',     direct_to_template, {'template': 'help/export_mail.html'}),
     (r'^help/printquota/$',     direct_to_template, {'template': 'help/printquota.html'}),
 
-    (r'^admin/(.*)', admin.site.root),
+    (r'^admin/', include(admin.site.urls)),
 )
 
 # Only load the SSO module if enabled. This pulls in saml2 and xmlsec dependencies.
@@ -69,9 +71,5 @@ else:
     sso_action = (r'^sso/$', direct_to_template, {'template': 'registration/sso_disabled.html'})
 urlpatterns += patterns('', sso_action)
 
-
-# Serve static media when in debug mode.
-if settings.DEBUG:
-    urlpatterns += patterns('',
-        (r'^media/(?P<path>.*)$',  'django.views.static.serve',    {'document_root': settings.MEDIA_ROOT}),
-    )
+# Serve static content during development
+urlpatterns += staticfiles_urlpatterns()

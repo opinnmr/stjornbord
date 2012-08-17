@@ -4,7 +4,7 @@
 {% block content %}
 
 {% block heading %}
-<h2>Starfsmenn <a href="/ou/add/"><img src="{{MEDIA_URL}}img/tango/22/actions/list-add.png"></a></h2>
+<h2>Starfsmenn <a href="/ou/add/"><img src="{{ STATIC_URL }}img/tango/22/actions/list-add.png"></a></h2>
 {% endblock %}
 
 {% if not object_list %}
@@ -30,6 +30,7 @@
 	{{ search_form }}
 	<input type="submit" value="Sía">
 	<br>Leita má eftir fornafni, eftirnafni eða kennitölu. 
+	{% csrf_token %}
 </form>
 
 <p>&nbsp;</p>
@@ -38,13 +39,13 @@
 {% ifnotequal pages 1 %}
 	<div class="paginator">
 		{% if has_previous %}
-			<a href="?page={{previous}}{% append_filter filters %}"><img src="{{MEDIA_URL}}img/tango/22/actions/go-previous.png" style="top: 3px"></a>
+			<a href="?page={{previous}}{% append_filter filters %}"><img src="{{ STATIC_URL }}img/tango/22/actions/go-previous.png" style="top: 3px"></a>
 		{% endif %}
 
 		{{ page }} af {{ pages }}
 
 		{% if has_next %}
-			<a href="?page={{next}}{% append_filter filters %}"><img src="{{MEDIA_URL}}img/tango/22/actions/go-next.png"></a>
+			<a href="?page={{next}}{% append_filter filters %}"><img src="{{ STATIC_URL }}img/tango/22/actions/go-next.png"></a>
 		{% endif %}
 	</div>
 {% endifnotequal %}
@@ -70,14 +71,14 @@
 		<tr class="{% cycle "row1" "row2" %}">
 			<td>{{ ou.kennitala }}</td>
 			<td><a href="{{ ou.get_absolute_url }}">{{ ou.first_name }} {{ ou.last_name }}</a></td>
-			<td><a href="{{ ou.get_absolute_url }}add_user/"><img src="{{MEDIA_URL}}img/tango/16/actions/list-add.png"></td>
+			<td><a href="{{ ou.get_absolute_url }}add_user/"><img src="{{ STATIC_URL }}img/tango/16/actions/list-add.png"></td>
 			<td>
 				{% for user in ou.userp.all %}
-					{% if user.dirty %}<img src="{{ MEDIA_URL }}img/tango/16/actions/appointment-new.png" title="Notandi bíður uppfærslu">{% endif %}
+					{% if user.dirty %}<img src="{{  STATIC_URL  }}img/tango/16/actions/appointment-new.png" title="Notandi bíður uppfærslu">{% endif %}
 					<span{% if not user.status.active %} class="strikethrough"{% endif %}><a href="{{ user.get_absolute_url }}">{{ user }}</a></span><br>
 				{% endfor %}
 			</td>
-			<td><a href="{{ ou.get_absolute_url }}add_list/"><img src="{{MEDIA_URL}}img/tango/16/actions/list-add.png"></td>
+			<td><a href="{{ ou.get_absolute_url }}add_list/"><img src="{{ STATIC_URL }}img/tango/16/actions/list-add.png"></td>
 			<td>
 				{% for ml in ou.mailinglist.all %}
 					<span><a href="{{ ml.get_absolute_url }}">{{ ml }}</a></span><br>
@@ -93,19 +94,19 @@
 {% ifnotequal pages 1 %}
 	<div class="paginator">
 		{% if has_previous %}
-			<a href="?page={{previous}}{% append_filter filters %}"><img src="{{MEDIA_URL}}img/tango/22/actions/go-previous.png" style="top: 3px"></a>
+			<a href="?page={{previous}}{% append_filter filters %}"><img src="{{ STATIC_URL }}img/tango/22/actions/go-previous.png" style="top: 3px"></a>
 		{% endif %}
 
 		{{ page }} af {{ pages }}
 
 		{% if has_next %}
-			<a href="?page={{next}}{% append_filter filters %}"><img src="{{MEDIA_URL}}img/tango/22/actions/go-next.png"></a>
+			<a href="?page={{next}}{% append_filter filters %}"><img src="{{ STATIC_URL }}img/tango/22/actions/go-next.png"></a>
 		{% endif %}
 	</div>
 {% endifnotequal %}
 
 <p>&nbsp;</p>
-<p>Klukkutáknið <img src="{{ MEDIA_URL }}img/tango/16/actions/appointment-new.png" title="Notandi bíður uppfærslu">
+<p>Klukkutáknið <img src="{{  STATIC_URL  }}img/tango/16/actions/appointment-new.png" title="Notandi bíður uppfærslu">
 	gefur til kynna að búið sé að breyta notanda í Stjórnborðinu, en enn eigi eftir að uppfæra netkerfið sjálft.
 	Það gerist almennt sjálfkrafa á nokkrum mínútum. Sé klukkumerkið lengi er ráðlegt að hafa samband við
 	kerfisstjóra.</p>

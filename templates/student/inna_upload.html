@@ -4,5 +4,6 @@
 <form enctype="multipart/form-data" method="post">
 	{{form}}
 	<input type="submit" value="Skoða áhrif">
+	{% csrf_token %}
 </form>
 {% endblock %}
