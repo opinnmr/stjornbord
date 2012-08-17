@@ -142,7 +142,6 @@ class UserProfile(models.Model):
     content_object  = generic.GenericForeignKey(ct_field="user_type", fk_field="kennitala")
 
     dirty           = models.IntegerField(blank=True, null=True, db_index=True, help_text="Einungis ef notandi bíður uppfærslu")
-    update_failures = models.IntegerField(blank=True, null=True, help_text="Misheppnaðar uppfærslutilraunir")
     
     posix_uid       = models.IntegerField(unique=True, blank=True)
     posix_groups    = models.ManyToManyField(PosixGroup, blank=True)
