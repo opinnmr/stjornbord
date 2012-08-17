@@ -21,7 +21,7 @@ INACTIVE_USER = 3
 DELETED_USER  = 4
 
 DEACTIVATE_GRACE_PERIOD = 90   # Days before deactivating a user,
-                               # after marking owner as "previous"
+                               # after marking owner as departed
 DELETE_GRACE_PERIOD     = 365  # Days before deleting data, after
                                # deactivating a user
 
@@ -36,7 +36,7 @@ def validate_username(username, current_holder=None):
     if not username_re.search(username):
         raise ValidationError(u"Notendanöfn meiga einungis innihalda enska bókstafi, tölustafi og undirstrik.")
 
-    users           = []
+    users = []
     for u in User.objects.filter(username=username):
         if current_holder is None or (current_holder is not None and u != current_holder.user):
             users.append(u.get_profile())
@@ -67,9 +67,9 @@ def send_email(username, full_name, deactivate):
         email = EmailMessage(
                     u"Lokað verður á MR netfang þitt %s" % date_format,
                     email_template.render(context),
-                    u'Kerfisstjórn MR <hjalp@mr.is>',   # from
-                    ["%s@mr.is" % username],       # to
-                    ['hjalp@mr.is'],                 # bcc
+                    u'Kerfisstjórn MR <hjalp@mr.is>', # from
+                    ["%s@mr.is" % username],          # to
+                    ['hjalp@mr.is'],                  # bcc
                 )
         email.send()
     
@@ -117,20 +117,6 @@ class PosixUidPool(models.Model):
     def __unicode__(self):
         return self.user_type.name
 
-class OldUser(models.Model):
-    username        = models.CharField(max_length=128, blank=True)
-    password        = models.CharField(max_length=128, blank=True)
-    status          = models.ForeignKey(UserStatus)
-    deactivate      = models.DateField(blank=True, null=True, help_text="Einungis ef notandi bíður lokunar")
-    purge           = models.DateField(blank=True, null=True, help_text="Einungis ef notandi bíður gagnaeyðslu")
-
-    user_type       = models.ForeignKey(ContentType)
-    kennitala       = models.CharField(max_length=10)
-    content_object  = generic.GenericForeignKey(ct_field="user_type", fk_field="kennitala")
-
-    class Meta:
-        db_table = 'user_user'
-
 class UserProfile(models.Model):
     user            = models.ForeignKey(User, unique=True)
     status          = models.ForeignKey(UserStatus)
@@ -142,36 +128,34 @@ class UserProfile(models.Model):
     content_object  = generic.GenericForeignKey(ct_field="user_type", fk_field="kennitala")
 
     dirty           = models.IntegerField(blank=True, null=True, db_index=True, help_text="Einungis ef notandi bíður uppfærslu")
+    tmppass         = models.CharField(max_length=80, blank=True)
     
     posix_uid       = models.IntegerField(unique=True, blank=True)
     posix_groups    = models.ManyToManyField(PosixGroup, blank=True)
 
-    tmppass         = models.CharField(max_length=80, blank=True)
-    inipa           = models.IntegerField(blank=True, default=0)
 
     def set_password(self, raw_password):
-        # Set password for Django's auth user model, without a salt.
-        import hashlib
-        self.user.password = u"sha1$$%s" % hashlib.sha1(raw_password.encode("utf8")).hexdigest()
-        self.user.save()
+        # Update password on the django side.
+        self.user.set_password(raw_password)
         
-        # Temporarily store password in clear text, for FreeIPA
+        # Temporarily store password in clear text, for authentication
+        # backend. For Google Apps, we can use sha1, but for FreeIPA we
+        # need to store the password in clear-text. This is read by the
+        # update daemon and cleared with the dirty bit.
         self.tmppass = raw_password
         self.set_dirty()
-
-    def get_password(self):
-        # Get sha1 password, without the sha1$$ prefix. Fails if we
-        # get a password with a salt.
-        p = self.user.password
-        if not p.startswith("sha1$$"):
-            raise RuntimeException("Wow, this password is not sha1 without a salt! (%s)" % p[p.rindex("$"):])
-        return p.split("$", 2)[2]
 
     def get_absolute_url(self):
         return "%s%s/" % (self.content_object.get_absolute_url(), self.id)
     
     def set_dirty(self):
         self.dirty = time.time()
+        
+    def clear_dirty(self, timestamp):
+        from django.db import connection, transaction
+        cursor = connection.cursor()
+        cursor.execute("UPDATE user_userprofile SET dirty = 0, tmppass = '' WHERE user_id = %s AND dirty = %s", (self.id, timestamp))
+        transaction.commit_unless_managed()
 
     def set_deactivate(self):
         self.deactivate = datetime.date.today() + datetime.timedelta(DEACTIVATE_GRACE_PERIOD)
@@ -259,7 +243,7 @@ class UserProfile(models.Model):
 
         # Finally, save the user
         models.Model.save(self)
-
+        
     def delete(self):
         """
         We don't want to allow Users to be deleted!

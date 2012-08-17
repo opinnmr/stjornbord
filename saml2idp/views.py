@@ -35,13 +35,6 @@ def assertView(request, template_name='registration/login.html'):
                 if request.session.test_cookie_worked():
                     request.session.delete_test_cookie()
 
-                # Temporary hack, while harvesting passwords for
-                # FreeIPA
-                p = request.user.get_profile()
-                if p.inipa is None or p.inipa == 0:
-                    p.tmppass = request.POST["password"]
-                    p.save()
-                
                 log.write("%s: %s - SUCCESS\n" % (datetime.now(), request.POST["username"].encode("utf8")))
 
                 return _sso_post_response(request)

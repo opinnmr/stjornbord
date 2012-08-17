@@ -54,7 +54,6 @@ def sync_get_dirty(request):
             'type':         'user',
             'username':     up.user.username,
             'posix_uid':    up.posix_uid,
-            'password':     up.get_password(),
             'tmppass':      up.tmppass,
             'fullname':     up.content_object.get_fullname(),
             'first_name':   up.content_object.first_name,
@@ -76,10 +75,5 @@ def sync_get_dirty(request):
 def sync_clean_dirty(request, username, timestamp):
     user = get_object_or_404(User, username=username)
     response = HttpResponse("ok", mimetype="text/plain")
-    
-    from django.db import connection, transaction
-    cursor = connection.cursor()
-    cursor.execute("UPDATE user_userprofile SET dirty = 0, inipa = 1, tmppass = '' WHERE user_id = %s AND dirty = %s", (user.id, timestamp))
-    transaction.commit_unless_managed()
-    
+    user.clear_dirty(timestamp)
     return response
