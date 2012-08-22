@@ -31,7 +31,7 @@ def register(request):
             if "id_username_0" in post_keys or "password" in post_keys:
                 other_post_stuff = request.POST
 
-            password_form = PasswordForm(other_post_stuff, render_value=False)
+            password_form = PasswordForm(other_post_stuff)
             username_form = UsernameForm(other_post_stuff)
             username_form.fields['username'].choices = [(x,x) for x in suggested_usernames]
 
