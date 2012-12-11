@@ -1,12 +1,16 @@
 # coding: utf8
+import hashlib
+import datetime
+import os.path
+import random
+import logging
+
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import user_passes_test
 from django.views.generic.list_detail import object_list
 from django import forms
-
-import hashlib, datetime, os.path, random
 
 from stjornbord.settings import INNA_ROOT
 from stjornbord.utils import prep_tmp_dir
@@ -18,6 +22,8 @@ from stjornbord.user.printquota import get_printquota, set_printquota
 from stjornbord.ou.views import _generic_ou_list
 from stjornbord.student.forms import UploadForm, UserForm, PrintQuotaForm
 
+log = logging.getLogger("stjornbord")
+
 @user_passes_test(lambda u: u.is_superuser)
 def inna_upload(request):
     if request.method == 'POST':
@@ -25,14 +31,17 @@ def inna_upload(request):
         if form.is_valid():
             prep_tmp_dir(INNA_ROOT)
             filename = "inna_%s_%s" % (datetime.datetime.now().strftime("%Y%m%d%H%M%S"), hashlib.md5(str(random.randrange(10000))).hexdigest())
-            inna     = file(os.path.join(INNA_ROOT, "%s.csv" % filename), "wb")
-            inna.write(form.cleaned_data['inna_file'].read())
-            inna.close()
-            
+            filename = os.path.join(INNA_ROOT, "%s.csv" % filename)
+
+            log.info("Saving uploaded inna file, filename=%s", filename)
+            with file(filename, "wb") as inna:
+                inna.write(form.cleaned_data['inna_file'].read())
+
             return HttpResponseRedirect('/students/import/%s/' % filename)
     else:
         form = UploadForm()
-    return render_to_response('student/inna_upload.html', {'form': form.as_p() }, context_instance=RequestContext(request))
+    return render_to_response('student/inna_upload.html',
+        {'form': form.as_p() }, context_instance=RequestContext(request))
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -50,6 +59,9 @@ def inna_import(request, filename):
         ip.update()
     except InnaParserException, e:
         error = e.message
+
+    log.info("Parsing inna file, pretend=%s, stats=%s, filename=%s",
+        pretend, ip.stats, filename)
 
     if pretend:
         return render_to_response('student/inna_import.html',
@@ -136,7 +148,10 @@ def printquota(request, kennitala, user_id):
     if request.method == "POST":
         form = PrintQuotaForm(request.POST)
         if form.is_valid():
-            set_printquota(userp.user, form.cleaned_data['balance'])
+            balance = form.cleaned_data['balance']
+            log.info("Updating quota, kennitala=%s, balance=%d",
+                kennitala, balance)
+            set_printquota(userp.user, balance)
             return HttpResponseRedirect("/students/list/")
     else:
         balance = get_printquota(userp.user)

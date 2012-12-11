@@ -2,3 +2,4 @@
 Django==1.4
 simplejson
 gdata
+https://bitbucket.org/trustcentric/django-requestlogging/get/tip.tar.gz

@@ -1,4 +1,8 @@
 # coding: utf8
+import logging
+import simplejson
+import sys
+
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.simple import direct_to_template
 from django.contrib.auth.decorators import login_required
@@ -10,7 +14,8 @@ from stjornbord.user.models import UserProfile
 from stjornbord.user.printquota import get_printquota
 from stjornbord.utils import mrnet_only, verify_sync_secret
 from django.contrib.auth.models import User
-import simplejson
+
+log = logging.getLogger("stjornbord")
 
 def frontpage(request):
     quota   = get_printquota(request.user)
@@ -20,7 +25,7 @@ def frontpage(request):
         "quota":    quota,
         "noquota":  noquota,
     }
-    
+
     return direct_to_template(request, 'frontpage.html', extra_context=c)
 
 @login_required
@@ -44,6 +49,7 @@ def change_password(request):
 
 @csrf_exempt
 @mrnet_only
+@verify_sync_secret
 def sync_get_dirty(request):
     dirty = UserProfile.objects.filter(dirty__gt=0)
     response = HttpResponse(mimetype="application/json")
@@ -63,10 +69,10 @@ def sync_get_dirty(request):
             'dirty':        up.dirty,
         })
 
+    if exp:
+        log.info("Returning dirty users, count=%s", len(exp))
+
     simplejson.dump(exp, response)
-    from django.db import connection
-    for l in connection.queries:
-        print l['sql']
     return response
 
 @csrf_exempt
@@ -74,6 +80,10 @@ def sync_get_dirty(request):
 @verify_sync_secret
 def sync_clean_dirty(request, username, timestamp):
     user = get_object_or_404(User, username=username)
-    response = HttpResponse("ok", mimetype="text/plain")
     user.get_profile().clear_dirty(timestamp)
+
+    log.info("Clearing dirty bit, user=%s, timestamp=%s",
+        username, timestamp)
+
+    response = HttpResponse("ok", mimetype="text/plain")
     return response

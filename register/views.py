@@ -1,4 +1,6 @@
 # coding: utf8
+import logging
+
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
@@ -14,6 +16,8 @@ from stjornbord.user.models import UserProfile, UserStatus, INACTIVE_USER
 from stjornbord.register.registration import suggest_usernames
 from stjornbord.register.forms import UsernameForm, KennitalaForm
 
+log = logging.getLogger("stjornbord")
+
 @mrnet_only
 def register(request):
     context = {}
@@ -26,17 +30,21 @@ def register(request):
 
             # See if the user actually posted some stuff, other that its
             # kennitala to get to this page
-            post_keys        =request.POST.keys()
+            post_keys        = request.POST.keys()
             other_post_stuff = None
             if "id_username_0" in post_keys or "password" in post_keys:
                 other_post_stuff = request.POST
 
             password_form = PasswordForm(other_post_stuff)
             username_form = UsernameForm(other_post_stuff)
-            username_form.fields['username'].choices = [(x,x) for x in suggested_usernames]
+            username_form.fields['username'].choices = [(x, x) for x in suggested_usernames]
 
             if username_form.is_valid() and password_form.is_valid():
-                user = User.objects.create(username=username_form.cleaned_data['username'], password="sha1$$tmp")
+                username = username_form.cleaned_data['username']
+                log.info("Creating user %s for student %s (kt %s)", username,
+                    student, student.kennitala)
+
+                user = User.objects.create(username=username, password="sha1$$tmp") # pw overridde below
                 userp = UserProfile(
                             user      = user,
                             kennitala = student.kennitala,

@@ -5,6 +5,7 @@ from django.template.context import RequestContext
 from django.contrib.auth import login as auth_login
 from django.conf import settings
 
+import logging
 from samlResponse import SAML2Response
 from datetime import datetime
 
@@ -12,6 +13,8 @@ privateKeyFileName = settings.SAML2IDP_PRIVATE_KEY_FILE
 certificateFileName = settings.SAML2IDP_CERTIFICATE_FILE
 
 samlResp = SAML2Response(privateKeyFileName, certificateFileName)
+
+auth_log = logging.getLogger("stjornbord.saml")
 
 @never_cache
 def assertView(request, template_name='registration/login.html'):
@@ -28,18 +31,17 @@ def assertView(request, template_name='registration/login.html'):
     
     if request.method == "POST":
         form = AuthenticationForm(data=request.POST)
-        with file("/tmp/login", "a") as log:
-            if form.is_valid():
-                auth_login(request, form.get_user())
+        if form.is_valid():
+            auth_login(request, form.get_user())
 
-                if request.session.test_cookie_worked():
-                    request.session.delete_test_cookie()
+            if request.session.test_cookie_worked():
+                request.session.delete_test_cookie()
 
-                log.write("%s: %s - SUCCESS\n" % (datetime.now(), request.POST["username"].encode("utf8")))
+            auth_log.info("SAML authentication success, user=%s", request.POST["username"].encode("utf8"))
 
-                return _sso_post_response(request)
-            else:
-                log.write("%s: %s - FAILURE\n" % (datetime.now(), request.POST["username"].encode("utf8")))
+            return _sso_post_response(request)
+        else:
+            auth_log.warning("SAML authentication failure, user=%s", request.POST["username"].encode("utf8"))
     else:
         form = AuthenticationForm(request)
     

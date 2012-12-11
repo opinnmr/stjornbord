@@ -47,6 +47,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
+    'django_requestlogging.middleware.LogSetupMiddleware',
 )
 
 PASSWORD_HASHERS = (
@@ -71,7 +72,85 @@ INSTALLED_APPS = (
     'stjornbord.devices',
     'stjornbord.saml2idp',
     'stjornbord.infoscreen',
+    'django_requestlogging',
 )
+
+# Add more logging
+# UPGRADE: When moving to Django 1.5, set disable_existing_loggers to False
+#          and remove the defaults, as they will be merged in by Django.
+#          For now, we have a full copy from global_settings.py
+#          See https://docs.djangoproject.com/en/dev/topics/logging/#configuring-logging
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'filters': {
+        'request': {
+            '()': 'django_requestlogging.logging_filters.RequestFilter',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+    # Project specific
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(remote_addr)s %(username)s %(asctime)s; %(message)s; pid:%(process)d tid:%(thread)d p:%(pathname)s:%(lineno)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        },
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+
+        # Project specific
+        'console': {
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+            'formatter': 'verbose',
+            'filters': ['request', ],
+        },
+        'file_handler': {
+            'level':'INFO',
+            'class':'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join(LOGGING_ROOT, 'stjornbord.log'),
+            'when': 'w0', # weekly
+            'formatter': 'verbose',
+            'filters': ['request', ],
+        },
+        'auth_log_handler': {
+            'level':'INFO',
+            'class':'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join(LOGGING_ROOT, 'stjornbord-saml-auth.log'),
+            'when': 'w0', # weekly
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+
+        # Project specific
+        'stjornbord': {
+            'handlers': ['console', 'file_handler'],
+            'propagate': False,
+            'level': DEBUG,
+
+        },
+        'stjornbord.saml': {
+            'handlers': ['console', 'auth_log_handler'],
+            'propagate': False,
+            'level': DEBUG,
+        },
+    }
+}
+
 
 AUTH_PROFILE_MODULE = "user.UserProfile"
 

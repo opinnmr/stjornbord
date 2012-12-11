@@ -30,6 +30,8 @@ GOOGLE_SSO_ENABLE = False
 SAML2IDP_PRIVATE_KEY_FILE = os.path.join(os.path.dirname(__file__), "ssokeys", "rsaprivkey.pem")
 SAML2IDP_CERTIFICATE_FILE = os.path.join(os.path.dirname(__file__), "ssokeys", "rsacert.pem")
 
+# Logging root
+LOGGING_ROOT = "/tmp/"
 
 # Temorary directory for Inna student files
 INNA_ROOT = "/tmp/stjornbord/inna/"
