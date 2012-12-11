@@ -91,9 +91,6 @@ LOGGING = {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse',
         },
-        'require_debug_true': {
-            '()': 'django.utils.log.RequireDebugTrue',
-        },
     },
     # Project specific
     'formatters': {
@@ -114,7 +111,7 @@ LOGGING = {
             'level':'DEBUG',
             'class':'logging.StreamHandler',
             'formatter': 'verbose',
-            'filters': ['request', 'require_debug_true', ],
+            'filters': ['request', ],
         },
         'file_handler': {
             'level':'INFO',
@@ -141,13 +138,13 @@ LOGGING = {
 
         # Project specific
         'stjornbord': {
-            'handlers': ['console', 'file_handler'],
+            'handlers': ['file_handler', ],
             'propagate': False,
             'level': 'INFO',
 
         },
         'stjornbord.saml': {
-            'handlers': ['console', 'auth_log_handler'],
+            'handlers': ['auth_log_handler', ],
             'propagate': False,
             'level': 'INFO',
         },
