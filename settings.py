@@ -127,6 +127,7 @@ LOGGING = {
             'filename': os.path.join(LOGGING_ROOT, 'stjornbord-saml-auth.log'),
             'when': 'w0', # weekly
             'formatter': 'verbose',
+            'filters': ['request', ],
         },
     },
     'loggers': {
