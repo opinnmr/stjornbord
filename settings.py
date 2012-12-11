@@ -91,6 +91,9 @@ LOGGING = {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse',
         },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
     },
     # Project specific
     'formatters': {
@@ -111,7 +114,7 @@ LOGGING = {
             'level':'DEBUG',
             'class':'logging.StreamHandler',
             'formatter': 'verbose',
-            'filters': ['request', ],
+            'filters': ['request', 'require_debug_true', ],
         },
         'file_handler': {
             'level':'INFO',
