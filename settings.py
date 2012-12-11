@@ -140,13 +140,13 @@ LOGGING = {
         'stjornbord': {
             'handlers': ['console', 'file_handler'],
             'propagate': False,
-            'level': DEBUG,
+            'level': 'INFO',
 
         },
         'stjornbord.saml': {
             'handlers': ['console', 'auth_log_handler'],
             'propagate': False,
-            'level': DEBUG,
+            'level': 'INFO',
         },
     }
 }
