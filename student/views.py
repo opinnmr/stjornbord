@@ -30,14 +30,14 @@ def inna_upload(request):
         form = UploadForm(request.POST, request.FILES)
         if form.is_valid():
             prep_tmp_dir(INNA_ROOT)
-            filename = "inna_%s_%s" % (datetime.datetime.now().strftime("%Y%m%d%H%M%S"), hashlib.md5(str(random.randrange(10000))).hexdigest())
-            filename = os.path.join(INNA_ROOT, "%s.csv" % filename)
+            base_filename = "inna_%s_%s" % (datetime.datetime.now().strftime("%Y%m%d%H%M%S"), hashlib.md5(str(random.randrange(10000))).hexdigest())
+            filename = os.path.join(INNA_ROOT, "%s.csv" % base_filename)
 
             log.info("Saving uploaded inna file, filename=%s", filename)
             with file(filename, "wb") as inna:
                 inna.write(form.cleaned_data['inna_file'].read())
 
-            return HttpResponseRedirect('/students/import/%s/' % filename)
+            return HttpResponseRedirect('/students/import/%s/' % base_filename)
     else:
         form = UploadForm()
     return render_to_response('student/inna_upload.html',
