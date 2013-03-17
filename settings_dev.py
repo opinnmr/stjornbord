@@ -11,7 +11,10 @@ DATABASES = {
         'NAME': 'stjornbord.sdb',
     }
 }
-EMAIL_HOST      = "iris.mr.is"
+
+# python -m smtpd -n -c DebuggingServer localhost:1025
+EMAIL_HOST      = "127.0.0.1"
+EMAIL_PORT      = "1025"
 
 # Django secret key
 SECRET_KEY = 'devsecretkey123'

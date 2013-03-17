@@ -98,6 +98,10 @@ LOGGING = {
             'format': '%(levelname)s %(remote_addr)s %(username)s %(asctime)s; %(message)s; pid:%(process)d tid:%(thread)d p:%(pathname)s:%(lineno)s',
             'datefmt': '%Y-%m-%d %H:%M:%S',
         },
+        'cron': {
+            'format': '%(levelname)s %(asctime)s; %(message)s; pid:%(process)d tid:%(thread)d p:%(pathname)s:%(lineno)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        },
     },
     'handlers': {
         'mail_admins': {
@@ -120,6 +124,13 @@ LOGGING = {
             'when': 'w0', # weekly
             'formatter': 'verbose',
             'filters': ['request', ],
+        },
+        'cron_handler': {
+            'level':'INFO',
+            'class':'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join(LOGGING_ROOT, 'stjornbord-cron.log'),
+            'when': 'w0', # weekly
+            'formatter': 'cron',
         },
         'auth_log_handler': {
             'level':'INFO',
@@ -146,6 +157,12 @@ LOGGING = {
         },
         'stjornbord.saml': {
             'handlers': ['auth_log_handler', ],
+            'propagate': False,
+            'level': 'INFO',
+        },
+
+        'stjornbord.cron': {
+            'handlers': ['console', 'cron_handler'],
             'propagate': False,
             'level': 'INFO',
         },

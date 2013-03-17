@@ -1,7 +1,9 @@
+import logging
 from django.db import models
 from django.contrib.contenttypes import generic
 
-from stjornbord.user.models import UserProfile, MailingList, log_wrapper, ACTIVE_USER, WCLOSURE_USER
+from stjornbord.user.models import UserProfile, MailingList, ACTIVE_USER, WCLOSURE_USER
+log = logging.getLogger("stjornbord")
 
 class Status(models.Model):
     name   = models.CharField(max_length=40)
@@ -104,11 +106,12 @@ def update_associated_users(newme):
             
             # Is the human being moved from an active state to an inactive one ?
             elif oldme.status.active and not newme.status.active:
-                log_wrapper(newme, "State changed to inactive. Disabling active users.")
+                log.info("Object %s state changed to inactive. Disabling active users.", oldme)
 
                 # Yes, that seems to be the case. Find all the persons users
                 # and mark them as waiting for closure
                 for userp in newme.userp.all():
                     if userp.status.active:
+                        log.info("User %s set waiting closure.", userp.user.username)
                         userp.status_id = WCLOSURE_USER
                         userp.save()

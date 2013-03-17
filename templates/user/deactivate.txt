@@ -1,7 +1,7 @@
 {{ name }}
 
 Skv. upplýsingum okkar ert þú ekki lengur á skrá við Menntaskólann og
-verður aðgangi að netfangi þínu og heimasvæði lokað eftir {{ days }} daga,
+verður aðgangi að netfangi þínu og heimasvæði lokað eftir {{ days }} dag{{ days|pluralize:"a"}},
 þann {{ date }} næstkomandi.
 
 Sé þetta misskilningur biðjum við þig að hafa samband (með því að

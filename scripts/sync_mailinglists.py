@@ -3,11 +3,16 @@ This script synchronizes mailinglists stored at Google.
 """
 
 import os
+import sys
+import logging
 os.environ['DJANGO_SETTINGS_MODULE'] = 'stjornbord.settings'
 
 from stjornbord.ou.models import OrganizationalUnit
 from stjornbord.student.models import Klass
 from stjornbord.google.api import Google
+
+log = logging.getLogger("stjornbord.cron")
+log.info("Running %s", sys.argv[0])
 
 google = Google()
 

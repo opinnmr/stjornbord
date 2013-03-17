@@ -11,6 +11,9 @@ from django.utils.encoding import force_unicode
 import time
 import re
 import datetime
+import logging
+
+log = logging.getLogger("stjornbord")
 
 from stjornbord.google.api import Google
 from stjornbord import settings
@@ -48,30 +51,31 @@ def validate_username(username, current_holder=None):
         if len(qs) != 0 and qs[0] != current_holder:
             raise ValidationError(u"Notendanafn ekki laust")
 
-def send_email(username, full_name, deactivate):
-    if settings.DEBUG:
-        log_wrapper(None, "NOT SENDING EMAIL TO %s@mr.is" % username)
-    else:        
-        log_wrapper(None, "Sending email to %s@mr.is" % username)
-        from django.core.mail import EmailMessage
-        from django.template import loader, Context
+def send_deactivate_email(username, full_name, deactivate, reminder=False):
+    log.info("Sending email to %s@mr.is", username)
+    from django.core.mail import EmailMessage
+    from django.template import loader, Context
 
-        email_template  = loader.get_template('user/deactivate.txt')
-        date_format     = deactivate.strftime("%d %b")
-        context = Context({
-                    'name': full_name,
-                    'days': DEACTIVATE_GRACE_PERIOD,
-                    'date': date_format,
-                    })
+    email_template  = loader.get_template('user/deactivate.txt')
+    date_format     = deactivate.strftime("%d %b")
+    context = Context({
+                'name': full_name,
+                'days': (deactivate - datetime.date.today()).days,
+                'date': date_format,
+                })
 
-        email = EmailMessage(
-                    u"Lokað verður á MR netfang þitt %s" % date_format,
-                    email_template.render(context),
-                    u'Kerfisstjórn MR <hjalp@mr.is>', # from
-                    ["%s@mr.is" % username],          # to
-                    ['hjalp@mr.is'],                  # bcc
-                )
-        email.send()
+    subject = u"Lokað verður á MR netfang þitt %s" % date_format
+    if reminder:
+        subject = u"Áminning: %s" % subject
+
+    email = EmailMessage(
+                subject,
+                email_template.render(context),
+                u'Kerfisstjórn MR <hjalp@mr.is>', # from
+                ["+%s@mr.is" % username],         # to
+                ['hjalp@mr.is'],                  # bcc
+            )
+    email.send()
     
 
 class UserStatus(models.Model):
@@ -204,7 +208,7 @@ class UserProfile(models.Model):
             # Active user given the a deactivation notice
             if (prev_status == ACTIVE_USER and cur_status == WCLOSURE_USER):
                 self.set_deactivate()
-                send_email(self.user.username, self.content_object.get_fullname(), self.deactivate)
+                send_deactivate_email(self.user.username, self.content_object.get_fullname(), self.deactivate)
             
             # User being deactivated
             elif (prev_status == WCLOSURE_USER and cur_status == INACTIVE_USER):
@@ -278,10 +282,3 @@ class MailingList(models.Model):
         # Force username validation. See User's comments
         validate_username(self.username, self)
         models.Model.save(self)
-
-
-def log_wrapper(obj, message, action=None):
-    # TODO: Use Django's new logging mechanism when updating
-    # to new Django release.
-    if settings.DEBUG:
-        print "LOG:", message
