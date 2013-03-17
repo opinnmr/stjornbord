@@ -165,4 +165,4 @@ SERVER_EMAIL="admin@mr.is"
 LAN_DOMAIN = "mr.lan"
 MRNET_IP = "82.148.70.66"
 
-AUTHENTICATION_BACKENDS = ('stjornbord.user.backend.TrimDomainBackend',)
+AUTHENTICATION_BACKENDS = ('stjornbord.user.backend.StjornbordBackend',)
