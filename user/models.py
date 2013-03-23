@@ -72,7 +72,7 @@ def send_deactivate_email(username, full_name, deactivate, reminder=False):
                 subject,
                 email_template.render(context),
                 u'Kerfisstjórn MR <hjalp@mr.is>', # from
-                ["+%s@mr.is" % username],         # to
+                ["%s@mr.is" % username],          # to
                 ['hjalp@mr.is'],                  # bcc
             )
     email.send()
