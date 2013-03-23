@@ -14,14 +14,15 @@ class StjornbordBackend(ModelBackend):
 
         user = ModelBackend.authenticate(self, username, password)
 
-        # Always authenticate a superuser (even if he hasn't got a
-        # profile)
-        if user.is_superuser:
-            return user
+        if user:
+            # Always authenticate a superuser (even if he hasn't got a
+            # profile)
+            if user.is_superuser:
+                return user
 
-        # Only authenticate users that are active or waiting for
-        # closure.
-        if user.get_profile().status.active:
-            return user
+            # Only authenticate users that are active or waiting for
+            # closure.
+            if user.get_profile().status.active:
+                return user
 
         return None
