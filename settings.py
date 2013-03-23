@@ -150,19 +150,19 @@ LOGGING = {
 
         # Project specific
         'stjornbord': {
-            'handlers': ['file_handler', ],
+            'handlers': ['mail_admins', 'file_handler', ],
             'propagate': False,
             'level': 'INFO',
 
         },
         'stjornbord.saml': {
-            'handlers': ['auth_log_handler', ],
+            'handlers': ['mail_admins', 'auth_log_handler', ],
             'propagate': False,
             'level': 'INFO',
         },
 
         'stjornbord.cron': {
-            'handlers': ['console', 'cron_handler'],
+            'handlers': ['mail_admins', 'cron_handler'],
             'propagate': False,
             'level': 'INFO',
         },
