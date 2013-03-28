@@ -131,6 +131,7 @@ def edit_user(request, kennitala, user_id=None):
                 userp.set_password(form.cleaned_data['password'])
 
             userp.set_dirty()
+            # TODO: Catch invalid state transitions.
             userp.save()
 
             return HttpResponseRedirect("/ou/list/")

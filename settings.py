@@ -174,7 +174,7 @@ AUTH_PROFILE_MODULE = "user.UserProfile"
 
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
-LOGIN_REDIRECT_URL = '/?'
+LOGIN_REDIRECT_URL = '/'
 
 DOMAIN = "mr.is"
 SERVER_EMAIL="admin@mr.is"

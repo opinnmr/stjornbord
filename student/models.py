@@ -46,12 +46,12 @@ class Student(models.Model):
         """
         return self.first_name +' '+ self.last_name
 
-    def save(self):
+    def save(self, *args, **kwargs):
         """
         Disable my users if I'm moving from an open state to a closed one
         """
         update_associated_users(self)
-        models.Model.save(self)
+        models.Model.save(self, *args, **kwargs)
             
     def __unicode__(self):
         return u"%s %s" % (self.first_name, self.last_name)

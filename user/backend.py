@@ -1,4 +1,5 @@
 from django.contrib.auth.backends import ModelBackend
+from stjornbord.user.models import UserProfile
 from stjornbord.settings import DOMAIN
 
 TRIM_DOMAIN = "@%s" % DOMAIN
@@ -14,15 +15,14 @@ class StjornbordBackend(ModelBackend):
 
         user = ModelBackend.authenticate(self, username, password)
 
-        if user:
-            # Always authenticate a superuser (even if he hasn't got a
-            # profile)
-            if user.is_superuser:
+        # If this user has a profile, make sure we only authenticate
+        # active users
+        try:
+            if user and user.get_profile().status.active:
                 return user
-
-            # Only authenticate users that are active or waiting for
-            # closure.
-            if user.get_profile().status.active:
-                return user
+        except UserProfile.DoesNotExist:
+            # This user doesn't have a profile, so we'll allow him
+            # through
+            return user
 
         return None

@@ -12,7 +12,7 @@ from stjornbord import settings
 from stjornbord.utils import mrnet_only
 from stjornbord.student.models import Student
 from stjornbord.user.forms import PasswordForm
-from stjornbord.user.models import UserProfile, UserStatus, INACTIVE_USER
+from stjornbord.user.models import UserProfile, UserStatus, ACTIVE_USER
 from stjornbord.register.registration import suggest_usernames
 from stjornbord.register.forms import UsernameForm, KennitalaForm
 
@@ -49,7 +49,7 @@ def register(request):
                             user      = user,
                             kennitala = student.kennitala,
                             user_type = ContentType.objects.get_for_model(student),
-                            status = UserStatus.objects.get(pk=1),
+                            status = UserStatus.objects.get(pk=ACTIVE_USER),
                         )
 
                 userp.set_password(password_form.cleaned_data['password'])

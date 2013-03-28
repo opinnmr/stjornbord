@@ -40,12 +40,12 @@ class OrganizationalUnit(models.Model):
     userp       = generic.GenericRelation(UserProfile, content_type_field="user_type", object_id_field="kennitala")
     mailinglist = generic.GenericRelation(MailingList, content_type_field="user_type", object_id_field="kennitala")
 
-    def save(self):
+    def save(self, *args, **kwargs):
         """
         Disable my users if I'm moving from an open state to a closed one
         """
         update_associated_users(self)
-        models.Model.save(self)
+        models.Model.save(self, *args, **kwargs)
 
     def delete(self):
         """

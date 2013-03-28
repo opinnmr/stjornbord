@@ -29,6 +29,8 @@ DELETE_GRACE_PERIOD     = 365  # Days before deleting data, after
                                # deactivating a user
 
 
+class InvalidUserProfileStateChangeException(Exception): pass
+
 username_re = re.compile(r'^[a-z0-9]{1}[a-z0-9_-]{1,24}$')
 
 def validate_username(username, current_holder=None):
@@ -96,10 +98,10 @@ class ReserverdUsername(models.Model):
     def __unicode__(self):
         return self.username
     
-    def save(self):
+    def save(self, *args, **kwargs):
         # Force username validation. See User's comments
         validate_username(self.username, self)
-        models.Model.save(self)
+        models.Model.save(self, *args, **kwargs)
 
 class PosixGroup(models.Model):
     name        = models.CharField(max_length=40)
@@ -174,7 +176,7 @@ class UserProfile(models.Model):
     def unset_purge(self):
         self.purge = None
 
-    def save(self):
+    def save(self, *args, **kwargs):
         # Yes, we are running this twice, both as an admin validator and
         # here in save(). The form validator is only called when used within
         # the django administrator (not normal functionality) but can be
@@ -205,13 +207,17 @@ class UserProfile(models.Model):
             prev_status = int(prev_version.status_id)
             cur_status  = int(self.status_id)
             
+            # No state change
+            if prev_status == cur_status:
+                pass
+
             # Active user given the a deactivation notice
-            if (prev_status == ACTIVE_USER and cur_status == WCLOSURE_USER):
+            elif (prev_status == ACTIVE_USER and cur_status == WCLOSURE_USER):
                 self.set_deactivate()
                 send_deactivate_email(self.user.username, self.content_object.get_fullname(), self.deactivate)
             
             # User being deactivated
-            elif (prev_status == WCLOSURE_USER and cur_status == INACTIVE_USER):
+            elif (prev_status in (ACTIVE_USER, WCLOSURE_USER) and cur_status == INACTIVE_USER):
                 self.unset_deactivate()
                 self.set_purge()
 
@@ -244,10 +250,14 @@ class UserProfile(models.Model):
 
             # Invalid move, cannot move from inactive to awaiting closure.
             elif (prev_status == INACTIVE_USER and cur_status == WCLOSURE_USER):
-                raise Exception("Sorry, changing state from Inactive to waiting for closure is not allowed. Activate the user instead.")
+                raise InvalidUserProfileStateChangeException("Sorry, changing state from Inactive to waiting for closure is not allowed. Activate the user instead.")
+
+            else:
+                log.fatal("Invalid state change (from %s to %s)", prev_status, cur_status)
+                raise InvalidUserProfileStateChangeException("Invalid state change (from %s to %s)" % (prev_status, cur_status))
 
         # Finally, save the user
-        models.Model.save(self)
+        models.Model.save(self, *args, **kwargs)
         
     def delete(self):
         """
@@ -278,7 +288,7 @@ class MailingList(models.Model):
     def get_absolute_url(self):
         return "%smailinglist/%s/" % (self.content_object.get_absolute_url(), self.id)
 
-    def save(self):
+    def save(self, *args, **kwargs):
         # Force username validation. See User's comments
         validate_username(self.username, self)
-        models.Model.save(self)
+        models.Model.save(self, *args, **kwargs)
