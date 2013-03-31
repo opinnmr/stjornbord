@@ -29,14 +29,9 @@ class StjornbordTestCase(django.test.TestCase):
         # user/sql/posixuidpool.sql
         m.PosixUidPool.objects.create(user_type=ContentType.objects.get_for_model(OrganizationalUnit), next_uid=500000)
 
-        self.USERNAME_1 = "some-username"
-
-
-class UserTest(StjornbordTestCase):
-    def setUp(self):
-        super(UserTest, self).setUp()
-        self.OU_STATUS_ACTIVE = OuStatus.objects.get(pk=1)
-        self.OU_GROUP_1 = OuGroup.objects.get(pk=1)
+        self.OU_STATUS_ACTIVE   = OuStatus.objects.get(pk=1)
+        self.OU_STATUS_INACTIVE = OuStatus.objects.get(pk=2)
+        self.OU_GROUP_1         = OuGroup.objects.get(pk=1)
         self.OU_1 = OrganizationalUnit.objects.create(kennitala=1, first_name="John",
                 last_name="Doe", status=self.OU_STATUS_ACTIVE, group=self.OU_GROUP_1)
 
@@ -45,7 +40,40 @@ class UserTest(StjornbordTestCase):
         self.USTATUS_INACTIVE = m.UserStatus.objects.get(pk=m.INACTIVE_USER)
         self.USTATUS_DELETED  = m.UserStatus.objects.get(pk=m.DELETED_USER)
 
+        self.USERNAME_1 = "some-username-a"
+        self.USERNAME_2 = "some-username-b"
+        self.USERNAME_3 = "some-username-c"
+        self.USERNAME_4 = "some-username-d"
 
+
+    def _create_user(self, username, content_object, status=None):
+        user = User.objects.create_user(username)
+        userp = m.UserProfile(
+                user      = user,
+                kennitala = content_object.kennitala,
+                user_type = ContentType.objects.get_for_model(content_object),
+                status    = status if status else self.USTATUS_ACTIVE,
+            )
+        userp.save()
+        return user
+
+
+    def _transition_user(self, user, from_state, to_state):
+        userp = user.get_profile()
+        self.assertEqual(userp.status, from_state)
+
+        # Transition
+        userp.status = to_state
+        userp.save()
+
+        # Re-fetch and return
+        userp = user.get_profile()
+        return userp
+
+
+
+
+class UserTest(StjornbordTestCase):
     def testCreateUserProfile(self):
         self._create_user(self.USERNAME_1, self.OU_1)
         self.assertEqual(User.objects.get(username=self.USERNAME_1).username, self.USERNAME_1)
@@ -56,6 +84,7 @@ class UserTest(StjornbordTestCase):
 
         with self.assertRaises(ValidationError):
             self._create_user(reserved_username, self.OU_1)
+
 
     def testDirtyBit(self):
         user = self._create_user(self.USERNAME_1, self.OU_1)
@@ -73,28 +102,18 @@ class UserTest(StjornbordTestCase):
         self.assertNotEqual(0, userp.dirty)
 
 
-    def _create_user(self, username, content_object, status=None):
-        user = User.objects.create_user(username)
-        userp = m.UserProfile(
-                user      = user,
-                kennitala = content_object.kennitala,
-                user_type = ContentType.objects.get_for_model(content_object),
-                status    = status if status else self.USTATUS_ACTIVE,
-            )
-        userp.save()
-        return user
+    def testUidIncreasingPool(self):
+        # Create users
+        users = []
+        for i in range(5):
+            users.append(self._create_user("%s-%d" % (self.USERNAME_1, i), self.OU_1))
 
-    def _transition_user(self, user, from_state, to_state):
-        userp = user.get_profile()
-        self.assertEqual(userp.status, from_state)
-
-        # Transition
-        userp.status = to_state
-        userp.save()
-
-        # Re-fetch and return
-        userp = user.get_profile()
-        return userp
+        # Make sure uid's are strictly increasing
+        last_uid = users[0].get_profile().posix_uid
+        for user in users[1:]:
+            uid = user.get_profile().posix_uid
+            self.assertEqual(last_uid, uid - 1)
+            last_uid = uid
 
 
     def _assertActive(self, userp):
