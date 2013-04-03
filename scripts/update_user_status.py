@@ -25,7 +25,7 @@ for disable_after in DISABLE_WARN_DAYS:
 
     for userp in UserProfile.objects.filter(status=WCLOSURE_USER, deactivate=disable_date).select_related(depth=1):
         log.info("Sending %d day closure reminder to %s", disable_after, userp)
-        send_deactivate_email("bjorn", #    userp.user.username,
+        send_deactivate_email(userp.user.username,
             userp.content_object.get_fullname(),
             userp.deactivate,
             reminder=True)
