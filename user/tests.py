@@ -4,6 +4,7 @@ import datetime
 import django.test
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
+from django.db.utils import IntegrityError
 from django.forms import ValidationError
 
 from stjornbord.user import models as m
@@ -116,20 +117,33 @@ class UserTest(StjornbordTestCase):
             last_uid = uid
 
 
+    def testUidUnique(self):
+        # Create users
+        userp1 = self._create_user(self.USERNAME_1, self.OU_1).get_profile()
+        userp2 = self._create_user(self.USERNAME_2, self.OU_1).get_profile()
+
+        userp2.posix_uid = userp1.posix_uid
+        with self.assertRaises(IntegrityError):
+            userp2.save()
+
+
     def _assertActive(self, userp):
         self.assertEqual(userp.status, self.USTATUS_ACTIVE)
         self.assertEqual(userp.deactivate, None)
         self.assertEqual(userp.purge, None)
+
 
     def _assertWClosure(self, userp):
         self.assertEqual(userp.status, self.USTATUS_WCLOSURE)
         self.assertEqual(userp.deactivate, datetime.date.today() + datetime.timedelta(m.DEACTIVATE_GRACE_PERIOD))
         self.assertEqual(userp.purge, None)
 
+
     def _assertInactive(self, userp):
         self.assertEqual(userp.status, self.USTATUS_INACTIVE)
         self.assertEqual(userp.deactivate, None)
         self.assertEqual(userp.purge, datetime.date.today() + datetime.timedelta(m.DELETE_GRACE_PERIOD))
+
 
     def _assertDeleted(self, userp):
         self.assertEqual(userp.status, self.USTATUS_DELETED)

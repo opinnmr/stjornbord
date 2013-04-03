@@ -69,6 +69,7 @@ INSTALLED_APPS = (
     'stjornbord.user',
     'stjornbord.ou',
     'stjornbord.student',
+    'stjornbord.register',
     'stjornbord.devices',
     'stjornbord.saml2idp',
     'stjornbord.infoscreen',

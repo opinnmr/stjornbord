@@ -18,7 +18,7 @@ def slugify(name):
     return u''.join(c for c in slug if c in allowed)
 
 
-def suggest_usernames(first_name, last_name, kennitala):
+def suggest_usernames(first_name, last_name):
     """
     Suggest usernames based on the students name.
     

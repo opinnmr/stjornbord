@@ -26,7 +26,7 @@ def register(request):
         kennitala_form = KennitalaForm(request.POST)
         if kennitala_form.is_valid():
             student = Student.objects.get(kennitala=kennitala_form.cleaned_data['kennitala'])
-            suggested_usernames = suggest_usernames(student.first_name, student.last_name, student.kennitala)
+            suggested_usernames = suggest_usernames(student.first_name, student.last_name)
 
             # See if the user actually posted some stuff, other that its
             # kennitala to get to this page
