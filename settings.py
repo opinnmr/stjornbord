@@ -1,7 +1,7 @@
 import os
 
 ADMINS      = (("bjorn swift", "bjorn@swift.is"),)
-MANAGERS    = ADMINS
+MANAGERS    = (("opinn mr", "opinn@mr.is"),)
 
 try:
     from settings_prod import *

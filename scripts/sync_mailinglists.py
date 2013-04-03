@@ -42,11 +42,12 @@ for klass in klasses:
     members = []
 
     if not username:
-        print "Whoops! This class doesn't have a username!"
+        log.error("Whoops! This class doesn't have a username!, klass=%s", klass)
         continue
 
-    # Make sure first letter is a number. If not, just through an
-    # exception
+    # Make sure first letter is a number. If not, just through an exception
+    # TODO: this exception needs to be caught somewhere and managers notified.
+    #       Currently sent as cron output.
     int(username[0])
 
     for student in klass.students.filter(status=1):  # not status__active as we don't want

@@ -10,7 +10,7 @@ import logging
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'stjornbord.settings'
 from stjornbord.user.models import UserProfile
-from django.core.mail import mail_admins
+from django.core.mail import mail_managers
 
 ALERT_AFTER_MIN = 60
 
@@ -33,7 +33,7 @@ log.info("Dirty scan complete, total=%s, in alarm=%s", dirty_total, dirty_alarm)
 
 if dirty_alarm:
 	log.warning("Dirty users queing up, total=%s, in alarm=%s", dirty_total, dirty_alarm)
-	mail_admins(u"Notendur bíða uppfærslu", u"""\
+	mail_managers(u"Notendur bíða uppfærslu", u"""\
 Alls bíða %d notendur eftir uppfærslu, þar af hafa %d beðið
 í yfir %d mínútur.
 
