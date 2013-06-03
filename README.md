@@ -2,8 +2,7 @@
 
 This package contains the user and network management portal for Menntaskólinn í Reykjavík (Reykjavik Junior Collage). The documentation is currently all in Icelandic, but feel free to snoop around and contact us if you are interested in the project! Our email is opinn you-know-what mr.is.
 
-Í þessu skjali má finna leiðbeiningar til að sækja og setja upp þróunarumhverfi fyrir Stjórnborð MR. Stjórnborðið heldur utan um starfsmenn og nemendur og er notað við notenda- og tækjaumsjón. Stjórnborðið sér um að senda tilkynningar á fyrrverandi starfsmenn/nemendur og stýra lokunum á notendum, en gerir sjálft ekki breytingar á notendagrunnum. Til þess notum við litla þjóna sem spyrja Stjórnborðið reglulega um hvað eigi að gera. Þessir þjónar eru ekki komnir á GitHub, er eru væntanlegir innan skamms!
-
+Í þessu skjali má finna leiðbeiningar til að sækja og setja upp þróunarumhverfi fyrir Stjórnborð MR. Stjórnborðið heldur utan um starfsmenn og nemendur og er notað við notenda- og tækjaumsjón. Stjórnborðið sér um að senda tilkynningar á fyrrverandi starfsmenn/nemendur og stýra lokunum á notendum, en gerir sjálft ekki breytingar á notendagrunnum. Til þess notum við litla þjóna sem spyrja Stjórnborðið reglulega um hvað eigi að gera. Einn þeirra, [Notendauppfærsluþjónninn](https://github.com/opinnmr/stjornbord-user-daemon) er kominn á GitHub, aðrir eru væntanlegir einhvern daginn.
 
 # Formáli uppsetningar
 
