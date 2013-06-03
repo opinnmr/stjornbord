@@ -17,7 +17,8 @@ def slugify(name):
     allowed = string.ascii_lowercase + " " + string.digits
     return u''.join(c for c in slug if c in allowed)
 
-def suggest_usernames(first_name, last_name, kennitala):
+
+def suggest_usernames(first_name, last_name):
     """
     Suggest usernames based on the students name.
     
@@ -34,7 +35,7 @@ def suggest_usernames(first_name, last_name, kennitala):
 
     suggestions = []
     def add_suggestion(username):
-        # Append last to digits of the year to username suggestion. This
+        # Append last two digits of the year to username suggestion. This
         # is to make it easier to maintain unique usernames
         username = "%s%s" % (username, datetime.date.today().strftime("%y"))
         

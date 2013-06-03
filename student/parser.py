@@ -61,17 +61,20 @@ class InnaParser(object):
         # Scroll through the rest of the file extracting the fields we are
         # interested in. Create a new data structure only containing fields
         # of interest.
-        students = []
-        for line in inna:
-            line = line.strip()
-            if line:
-                line = line.split(DELIMITER)
-                student = []
-                for field in FIELDS:
-                    student.append(line[field_map[field]])
-                students.append(student)
-
-        inna.close()
+        try:
+            students = []
+            for line in inna:
+                line = line.strip()
+                if line:
+                    line = line.split(DELIMITER)
+                    student = []
+                    for field in FIELDS:
+                        student.append(line[field_map[field]])
+                    students.append(student)
+        except IndexError:
+            raise InnaParserException("Error while parsing Inna body, incorrect file format")
+        finally:
+            inna.close()
     
         return students
 

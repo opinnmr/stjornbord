@@ -12,7 +12,7 @@ from stjornbord import settings
 from stjornbord.utils import mrnet_only
 from stjornbord.student.models import Student
 from stjornbord.user.forms import PasswordForm
-from stjornbord.user.models import UserProfile, UserStatus, INACTIVE_USER
+from stjornbord.user.models import UserProfile, UserStatus, ACTIVE_USER
 from stjornbord.register.registration import suggest_usernames
 from stjornbord.register.forms import UsernameForm, KennitalaForm
 
@@ -26,7 +26,7 @@ def register(request):
         kennitala_form = KennitalaForm(request.POST)
         if kennitala_form.is_valid():
             student = Student.objects.get(kennitala=kennitala_form.cleaned_data['kennitala'])
-            suggested_usernames = suggest_usernames(student.first_name, student.last_name, student.kennitala)
+            suggested_usernames = suggest_usernames(student.first_name, student.last_name)
 
             # See if the user actually posted some stuff, other that its
             # kennitala to get to this page
@@ -49,7 +49,7 @@ def register(request):
                             user      = user,
                             kennitala = student.kennitala,
                             user_type = ContentType.objects.get_for_model(student),
-                            status = UserStatus.objects.get(pk=1),
+                            status = UserStatus.objects.get(pk=ACTIVE_USER),
                         )
 
                 userp.set_password(password_form.cleaned_data['password'])

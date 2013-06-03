@@ -1,1 +1,7 @@
-[{"pk": 2, "model": "ou.status", "fields": {"active": false, "name": "Fyrrverandi"}}, {"pk": 1, "model": "ou.status", "fields": {"active": true, "name": "N\u00faverandi"}}, {"pk": 3, "model": "ou.status", "fields": {"active": true, "name": "\u00cd leyfi"}}, {"pk": 2, "model": "ou.group", "fields": {"name": "Annar starfsma\u00f0ur"}}, {"pk": 1, "model": "ou.group", "fields": {"name": "Kennari"}}]
+[
+{"pk": 1, "model": "ou.status", "fields": {"active": true, "name": "N\u00faverandi"}},
+{"pk": 2, "model": "ou.status", "fields": {"active": false, "name": "Fyrrverandi"}},
+{"pk": 3, "model": "ou.status", "fields": {"active": true, "name": "\u00cd leyfi"}},
+{"pk": 1, "model": "ou.group", "fields": {"name": "Kennari"}},
+{"pk": 2, "model": "ou.group", "fields": {"name": "Annar starfsma\u00f0ur"}}
+]
