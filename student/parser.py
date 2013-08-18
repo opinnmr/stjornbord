@@ -149,6 +149,11 @@ class InnaParser(object):
         for kennitala, name, klass, guardian1, guardian2 in inna_students:
             first_name, last_name = name.rsplit(" ", 1)
 
+            # Pad kennitala with leading zeros. The leading zero can be
+            # stripped of if the input file is opened or modified as a
+            # spreadsheet
+            kennitala = kennitala.zfill(10)
+
             student = self.find_student(kennitala, active_students, other_students)
             if not student:
                 self.stats['create'] += 1

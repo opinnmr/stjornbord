@@ -49,27 +49,33 @@ class InnaParserTest(django.test.TestCase):
 		self.assertEqual(parser.stats["update"], 2)
 		self.assertEqual(parser.stats["delete"], 0)
 
+		# Import year 2 once more, but now from a file with a
+		# missing leading zero in the kennitala field
+		parser = InnaParser("student/test_files/inna_year2_missing_leading_zero.csv", pretend=False)
+		parser.update()
+
+		self.assertEqual(parser.stats["create"], 0)
+		self.assertEqual(parser.stats["update"], 2)
+		self.assertEqual(parser.stats["delete"], 0)
+
 		# Verify that the prev student has been deactivated
 		self.assertEqual(Student.objects.filter(status__active=True).count(), 2)
 		self.assertEqual(Student.objects.filter(status__active=False).count(), 1)
 
 
 	def testParserMissingHeader(self):
-		# Import year 1
 		parser = InnaParser("student/test_files/inna_invalid_missing_header.csv", pretend=False)
 		with self.assertRaises(InnaParserException):
 			parser.update()
 
 
 	def testParserMissingValue(self):
-		# Import year 1
 		parser = InnaParser("student/test_files/inna_invalid_missing_value.csv", pretend=False)
 		with self.assertRaises(InnaParserException):
 			parser.update()
 
 
 	def testParserIncorrectSeparator(self):
-		# Import year 1
 		parser = InnaParser("student/test_files/inna_invalid_separator.csv", pretend=False)
 		with self.assertRaises(InnaParserException):
 			parser.update()
