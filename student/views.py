@@ -82,7 +82,7 @@ def export(request):
     for student in students:
         users = student.userp.filter(status__active=1)
         if users:
-            response.write("%s;;;%s@mr.is;;;;\n" % (student.kennitala, users[0].user.username))
+            response.write("%s;;;%s@mr.is;;;;;\n" % (student.kennitala, users[0].user.username))
 
     return response
 
