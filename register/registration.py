@@ -1,5 +1,5 @@
 from django.forms import ValidationError
-from stjornbord.user.forms import validate_username
+from stjornbord.user.models import validate_username
 
 import datetime
 

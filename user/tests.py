@@ -8,6 +8,7 @@ from django.db.utils import IntegrityError
 from django.forms import ValidationError
 
 from stjornbord.user import models as m
+from stjornbord.user import forms as f
 from stjornbord.ou.models import (OrganizationalUnit, Status as OuStatus, Group as OuGroup)
 
 class UserStatusTest(django.test.TestCase):
@@ -239,3 +240,47 @@ class UserTest(StjornbordTestCase):
 
         with self.assertRaises(m.InvalidUserProfileStateChangeException):
             userp = self._transition_user(user, self.USTATUS_DELETED, self.USTATUS_INACTIVE)
+
+class PasswordTest(django.test.TestCase):
+    def testPasswords(self):
+        """
+        Test a handful of valid and invalid passwords
+        """
+
+        alpha_base = "a" * f.PASSWORD_MIN_LENGTH
+        num_base   = "1" * f.PASSWORD_MIN_LENGTH
+
+        # Too short
+        self.assertFalse(self.validate_form(alpha_base[:-1]))
+
+        # No numeric
+        self.assertFalse(self.validate_form(alpha_base))
+
+        # No alpha
+        self.assertFalse(self.validate_form(num_base))
+
+        # aaaaaa1 etc
+        self.insert_char(alpha_base, "1")
+        self.insert_char(num_base, "a")
+
+        # some special chars
+        for c in "._/-!@#$%^&*()":
+            self.insert_char(alpha_base, c)
+
+        # Dis-allow non 7-bit passwords
+        self.assertFalse(self.validate_form(u"það1" * f.PASSWORD_MIN_LENGTH))
+
+    def insert_char(self, base, chr):
+        for i in range(len(base)):
+            pw = list(base)
+            pw[i] = chr
+            pw = "".join(pw)
+            self.assertTrue(self.validate_form(pw), "Should be valid: %s" % pw)
+
+    def validate_form(self, pw):
+        data = {
+            'password': pw,
+            'password2': pw,
+            }
+        form = f.PasswordForm(data)
+        return form.is_valid()

@@ -61,6 +61,16 @@ def _clean_password(self):
     if all(c.isalpha() == first_isalpha for c in password):
         raise forms.ValidationError("Lykilorðið þarf að innihalda amk einn bókstaf og "
                     "einn tölustaf eða greinarmerki.")
+
+    # We're currenly using ldapmodify to update the password, and that only
+    # supports passwords with 7-bit characters. Enforcing 7-bit passwords for
+    # now, but we'll want to address this in the user update daemon at some
+    # point.
+    try:
+        password.encode("us-ascii")
+    except UnicodeEncodeError, e:
+        raise forms.ValidationError("Lykilorðið má ekki innihalda séríslenska stafi eða "
+            "önnur tákn")
     
     return self.data['password']
 
