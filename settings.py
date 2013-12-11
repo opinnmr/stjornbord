@@ -73,7 +73,6 @@ INSTALLED_APPS = (
     'stjornbord.devices',
     'stjornbord.saml2idp',
     'stjornbord.infoscreen',
-    'stjornbord.mailinglist',
     'django_requestlogging',
 )
 
