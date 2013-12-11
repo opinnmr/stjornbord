@@ -38,6 +38,7 @@ urlpatterns = patterns('',
     (r'^ou/(?P<kennitala>\d{10})/$',                    stjornbord.ou.views.change),
     (r'^ou/(?P<kennitala>\d{10})/add_user/$',           stjornbord.ou.views.edit_user, {'user_id': None}),
     (r'^ou/(?P<kennitala>\d{10})/(?P<user_id>\d+)/$',   stjornbord.ou.views.edit_user),
+    
     (r'^ou/(?P<kennitala>\d{10})/add_list/$',           stjornbord.ou.views.edit_mailinglist, {'list_id': None}),
     (r'^ou/(?P<kennitala>\d{10})/mailinglist/(?P<list_id>\d+)/$',   stjornbord.ou.views.edit_mailinglist),
 

@@ -15,7 +15,7 @@ import logging
 
 log = logging.getLogger("stjornbord")
 
-from stjornbord.google.api import Google
+from stjornbord.utils import create_google_api
 from stjornbord import settings
 
 ACTIVE_USER   = 1
@@ -270,17 +270,21 @@ class UserProfile(models.Model):
     def __unicode__(self):
         return self.user.username
 
-
+# TODO: This should probably be moved to it's own module. Currently calls the
+# Google api directly, but could be abstracted for other backends.
 class MailingList(models.Model):
     """
-    Mailinglist object, keeps record of list name and owner, but not
-    recipients - they are only stored with Google as of now.
+    Base mailinglist object. Keeps record of the list name and owner, but
+    not its members. That's handled by one of the
     """
     username        = models.CharField(max_length=40)
 
     user_type       = models.ForeignKey(ContentType)
     kennitala       = models.CharField(max_length=10)
     content_object  = generic.GenericForeignKey(ct_field="user_type", fk_field="kennitala")
+
+    _members_dirty  = False
+    _members        = None
 
     def __unicode__(self):
         return self.username
@@ -291,4 +295,23 @@ class MailingList(models.Model):
     def save(self, *args, **kwargs):
         # Force username validation. See User's comments
         validate_username(self.username, self)
+
+        # Implemented by 
+        self._sync_members()
         models.Model.save(self, *args, **kwargs)
+
+    # The following three functions are specific to Google Apps. These can
+    # be factored out if we later want to support more mailing list backends.
+
+    def get_members(self):
+        if self._members is None:
+            self._members = create_google_api().list_members(self.username)
+        return self._members
+
+    def set_members(self, members):
+        self._members = members
+        self._members_dirty = True
+
+    def _sync_members(self):
+        if self._members_dirty:
+            create_google_api().list_sync(self.username, self._members)

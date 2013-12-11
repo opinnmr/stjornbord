@@ -12,7 +12,7 @@ from stjornbord.ou.models import OrganizationalUnit, Status, Group
 from stjornbord.user.models import UserProfile, UserStatus, MailingList
 from stjornbord.ou.forms import UserForm, MailingListForm, SearchForm, OrganizationalUnitBase
 
-from stjornbord.google.api import Google
+from stjornbord.utils import handle_google_auth_exception
 
 def _generic_ou_list(request, model, filter_items, template_name):
     """
@@ -149,7 +149,7 @@ def edit_user(request, kennitala, user_id=None):
             'editwarning': True if userp else False },
         context_instance=RequestContext(request))
 
-
+@handle_google_auth_exception
 @user_passes_test(lambda u: u.is_superuser)
 def edit_mailinglist(request, kennitala, list_id=None):
     ou   = get_object_or_404(OrganizationalUnit, pk=kennitala)
@@ -164,16 +164,14 @@ def edit_mailinglist(request, kennitala, list_id=None):
     if request.method == "POST":
         form = MailingListForm(request.POST)
         if form.is_valid(current_holder=mailinglist):
-            if not list_id:
+            if not mailinglist:
                 mailinglist = MailingList(
                             username=form.cleaned_data['username'],
                             kennitala = ou.kennitala,
                             user_type = ContentType.objects.get_for_model(ou),
                         )
-                mailinglist.save()
-            
-            members = [addr.strip() for addr in form.cleaned_data['members'].split('\n') if "@" in addr]
-            Google().list_sync(mailinglist.username, members)
+            mailinglist.set_members([addr.strip() for addr in form.cleaned_data['members'].split('\n') if "@" in addr])
+            mailinglist.save()
             
             return HttpResponseRedirect("/ou/list/")
     else:
@@ -181,8 +179,9 @@ def edit_mailinglist(request, kennitala, list_id=None):
 
         if list_id:
             initial['username'] = mailinglist.username
-            initial['members']  = "\n".join(Google().list_members(mailinglist.username))
+            initial['members']  = "\n".join(mailinglist.get_members())
 
         form = MailingListForm(initial=initial)
 
     return render_to_response('ou/edit.html', {'form': form.as_ul(), 'title': title }, context_instance=RequestContext(request))
+

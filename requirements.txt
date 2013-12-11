@@ -1,5 +1,5 @@
 # Base requirements
 Django>=1.4.5,<1.5
 simplejson
-gdata
 https://bitbucket.org/trustcentric/django-requestlogging/get/tip.tar.gz
+google-api-python-client

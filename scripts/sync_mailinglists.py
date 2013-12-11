@@ -9,12 +9,12 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'stjornbord.settings'
 
 from stjornbord.ou.models import OrganizationalUnit
 from stjornbord.student.models import Klass
-from stjornbord.google.api import Google
+from stjornbord.utils import create_google_api
 
 log = logging.getLogger("stjornbord.cron")
 log.info("Running %s", sys.argv[0])
 
-google = Google()
+google = create_google_api()
 
 ####
 # Fetch teachers and other staff

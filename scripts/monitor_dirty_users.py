@@ -7,7 +7,6 @@ import os
 import sys
 import time
 import logging
-
 os.environ['DJANGO_SETTINGS_MODULE'] = 'stjornbord.settings'
 from stjornbord.user.models import UserProfile
 from django.core.mail import mail_managers
