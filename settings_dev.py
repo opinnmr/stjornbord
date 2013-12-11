@@ -23,8 +23,6 @@ SECRET_KEY = 'devsecretkey123'
 SYNC_SECRET = "devsecret123"
 
 # Google API username/pass 
-UPDATE_GOOGLE   = False
-GOOGLE_TMP_DIR = "/tmp/"
 GOOGLE_TOKEN   = "/tmp/tokens.dat"
 GOOGLE_SECRETS = os.path.join(os.path.dirname(__file__), "ssokeys", "client_secrets.json")
 
