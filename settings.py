@@ -54,7 +54,7 @@ PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
     'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
     'django.contrib.auth.hashers.BCryptPasswordHasher',
-    'stjornbord.user.auth.SaltlessSHA1PasswordHasher',
+    'django.contrib.auth.hashers.UnsaltedSHA1PasswordHasher', # Legacy
 )
 
 
