@@ -43,7 +43,7 @@ urlpatterns = patterns('',
     (r'^ou/(?P<kennitala>\d{10})/mailinglist/(?P<list_id>\d+)/$',   stjornbord.ou.views.edit_mailinglist),
 
     # User and device synchronization
-    (r'^devices/export/$',                  stjornbord.devices.views.export),
+    (r'^devices/export/((?P<fmt>\w+)/)?$',  stjornbord.devices.views.export),
     (r'^counter/(?P<name>[\w]+)/$',         stjornbord.devices.views.counter),
     (r'^dirty/users/$',                     stjornbord.user.views.sync_get_dirty),
     (r'^clean/user/(?P<username>\w+)/(?P<timestamp>\d+)/$', stjornbord.user.views.sync_clean_dirty),
