@@ -2,4 +2,4 @@
 Django>=1.4.5,<1.5
 simplejson
 https://bitbucket.org/trustcentric/django-requestlogging/get/tip.tar.gz
-google-api-python-client
+git+http://github.com/opinnmr/stjornbord-google-api.git

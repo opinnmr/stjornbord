@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 from django.http import HttpResponseForbidden
 from stjornbord import settings
-from stjornbord.google.api import Google, GoogleAPICredentialException
+from stjornbord_google_api import Google, GoogleAPICredentialException
 
 log = logging.getLogger("stjornbord")
 

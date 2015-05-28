@@ -19,12 +19,12 @@ import uuid
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'stjornbord.settings'
 from stjornbord import settings
-from stjornbord.google import api
+from stjornbord.utils import create_google_api
 
 # https://developers.google.com/admin-sdk/directory/v1/guides/authorizing
 SCOPE = ["https://www.googleapis.com/auth/admin.directory.group", ]
 
-g = api.Google(settings.GOOGLE_TOKEN, settings.DOMAIN)
+g = create_google_api()
 
 def fetch_nonexistent_list():
     try:
