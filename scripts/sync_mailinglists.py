@@ -37,7 +37,7 @@ google.list_sync("starfsmenn", starfsmenn_members)
 
 ####
 # Sync class mailinglists
-r_username = re.compile(r"([3-6]|vi|v|vi)([a-z]|usk)$"
+r_username = re.compile(r"([3-6]|iv|v|vi)([a-z]|usk)$")
 klasses = Klass.objects.all()
 for klass in klasses:
     username = klass.name.lower().replace(".", "")
