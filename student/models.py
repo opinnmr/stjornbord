@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.contenttypes import generic
 
-from stjornbord.ou.models import Status, update_associated_users
+from stjornbord.ou.models import Status, update_associated_user_status
 from stjornbord.user.models import UserProfile
 
 class Klass(models.Model):
@@ -50,7 +50,7 @@ class Student(models.Model):
         """
         Disable my users if I'm moving from an open state to a closed one
         """
-        update_associated_users(self)
+        update_associated_user_status(self)
         models.Model.save(self, *args, **kwargs)
             
     def __unicode__(self):

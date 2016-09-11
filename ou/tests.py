@@ -92,3 +92,36 @@ class OUTestCase(StjornbordTestCase):
 
         # Verify state after OU closure
         self._verify_user_state(after)
+
+    def _assertDirty(self, username, expect_dirty):
+        user = User.objects.get(username=username)
+        if expect_dirty:
+            self.assertGreater(user.get_profile().dirty, 0)
+        else:
+            self.assertEqual(user.get_profile().dirty, 0)
+
+    def testUpdateMarksAllUsersAsDirty(self):
+        users = (
+            # username, user-status, should-be-marked-dirty
+            (self.USERNAME_1, self.USTATUS_ACTIVE),
+            (self.USERNAME_2, self.USTATUS_ACTIVE),
+            (self.USERNAME_3, self.USTATUS_INACTIVE),
+            )
+
+        # Create a few users for this UO
+        self._create_users(self.OU_1, users)
+
+        # Clear the dirty bit on all of them
+        for username, _ in users:
+            user = User.objects.get(username=username)
+            user.get_profile().clear_dirty(user.get_profile().dirty)
+
+        # Validate that all users have been reset
+        for username, _ in users:
+            self._assertDirty(username, False)
+
+        # Update the UO, expect all active users to be set dirty
+        self.OU_1.save()
+        self._assertDirty(self.USERNAME_1, True)
+        self._assertDirty(self.USERNAME_2, True)
+        self._assertDirty(self.USERNAME_3, False)

@@ -44,7 +44,8 @@ class OrganizationalUnit(models.Model):
         """
         Disable my users if I'm moving from an open state to a closed one
         """
-        update_associated_users(self)
+        update_associated_user_status(self)
+        mark_active_associated_users_dirty(self)
         models.Model.save(self, *args, **kwargs)
 
     def delete(self):
@@ -68,7 +69,18 @@ class OrganizationalUnit(models.Model):
     class Meta:
         ordering = ['first_name', 'last_name']
 
-def update_associated_users(newme):
+def mark_active_associated_users_dirty(newme):
+    """
+    Mark active associated users as dirty after modifying the OU, as it's name
+    (and later, group etc) may have changed, requiring an update.
+    """
+    for userp in newme.userp.filter(status__active=1):
+        log.info("Object %s changed. Marking active user %s dirty.", newme, userp.user.username)
+        userp.set_dirty()
+        userp.save()
+
+
+def update_associated_user_status(newme):
     """
     This is a helper function used by Student and OrganizationalUnit models.
     It looks to see if the "human" is being moved from an active status to an
@@ -98,6 +110,7 @@ def update_associated_users(newme):
                 # is being closed" email but for some reason should keep their
                 # accounts. They might be exchange students abroad or whatever..
                 for userp in newme.userp.filter(status=WCLOSURE_USER):
+                    log.info("Object %s state changed to active. Activate user %s", oldme, userp.user.username)
                     userp.status_id = ACTIVE_USER
                     userp.save()
             
