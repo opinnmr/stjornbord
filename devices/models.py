@@ -8,10 +8,11 @@ import time
 
 IP_RANGE = (100, 200)
 
-# Mac Address field
+# Mac Address field adapted from
 # http://djangosnippets.org/snippets/1337/
+# (regex updated)
 
-MAC_RE = r'^([0-9a-fA-F]{2}(:?|$)){6}$'
+MAC_RE = r'^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$'
 mac_re = re.compile(MAC_RE)
 
 class MACAddressFormField(fields.RegexField):
