@@ -38,4 +38,4 @@
 
 # PyXMLSec note: we need r365 which is in SVN but has not been released
 svn+svn://labs.libre-entreprise.org/svnroot/pyxmlsec/trunk
-svn+http://python-saml2.googlecode.com/svn/trunk/
+https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/python-saml2/python-saml2-0.0.5.tar.gz
