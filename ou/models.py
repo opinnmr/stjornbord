@@ -41,9 +41,6 @@ class OrganizationalUnit(models.Model):
     mailinglist = generic.GenericRelation(MailingList, content_type_field="user_type", object_id_field="kennitala")
 
     def save(self, *args, **kwargs):
-        """
-        Disable my users if I'm moving from an open state to a closed one
-        """
         update_associated_user_status(self)
         mark_active_associated_users_dirty(self)
         models.Model.save(self, *args, **kwargs)
