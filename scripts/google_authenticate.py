@@ -17,6 +17,8 @@ import os
 import sys
 import uuid
 
+from stjornbord_google_api import GoogleAPICredentialException
+
 os.environ['DJANGO_SETTINGS_MODULE'] = 'stjornbord.settings'
 from stjornbord import settings
 from stjornbord.utils import create_google_api
@@ -29,7 +31,7 @@ g = create_google_api()
 def fetch_nonexistent_list():
     try:
         return g.list_members(str(uuid.uuid4())) is None
-    except api.GoogleAPICredentialException, e:
+    except GoogleAPICredentialException, e:
         return False
 
 def main():
