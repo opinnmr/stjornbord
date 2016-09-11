@@ -3,6 +3,7 @@ This script synchronizes mailinglists stored at Google.
 """
 
 import os
+import re
 import sys
 import logging
 os.environ['DJANGO_SETTINGS_MODULE'] = 'stjornbord.settings'
@@ -36,19 +37,15 @@ google.list_sync("starfsmenn", starfsmenn_members)
 
 ####
 # Sync class mailinglists
+r_username = re.compile(r"([3-6]|vi|v|vi)([a-z]|usk)$"
 klasses = Klass.objects.all()
 for klass in klasses:
     username = klass.name.lower().replace(".", "")
     members = []
 
-    if not username:
-        log.error("Whoops! This class doesn't have a username!, klass=%s", klass)
+    if not username or not r_username.match(username):
+        log.error("Whoops! This class doesn't have a valid username!, klass=%s", klass)
         continue
-
-    # Make sure first letter is a number. If not, just through an exception
-    # TODO: this exception needs to be caught somewhere and managers notified.
-    #       Currently sent as cron output.
-    int(username[0])
 
     for student in klass.students.filter(status=1):  # not status__active as we don't want
         for userp in student.userp.filter(status=1).select_related(depth=1):  # student on leave
